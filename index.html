@@ -138,24 +138,22 @@
   </div>
 </div>
 
-<!-- CONTACT (With Chat) -->
+<!-- CONTACT / INK CROW CHAT -->
 <div class="overlay" id="overlay-contact">
   <div class="modal">
-    <button class="close" data-close></button> &#10005;</button>
+    <button class="close" data-close>CLOSE &#10005;</button>
     <div class="modal-content">
       <div class="spec-id mono">CONTACT / ASK THE CROW</div>
-      </div>
-      <!-- Chat Interface -->
-      <div class="chat-container">
-        <div class="chat-history" id="chat-history">
-          <div class="chat-msg ai-msg"><i>*Caw*</i> I am the Ink Crow. Ask me about Renan's skills or projects.</div>
+      <h2>Ask the Ink Crow</h2>
+      <p class="chat-intro">Click the crow anytime to open this conversation. Tune the crow's voice and reference pages below; settings are saved in this browser.</p>
+      <div class="chat-container" id="ink-crow-chat">
+        <div class="chat-history" data-chat-history>
         </div>
         <div class="chat-input-area">
-          <input type="text" id="chat-input" placeholder="Ask the crow..." />
-          <button id="chat-submit">Ask</button>
+          <input type="text" data-chat-input placeholder="Ask the crow..." autocomplete="off" />
+          <button type="button" data-chat-send>Ask</button>
         </div>
       </div>
-
     </div>
   </div>
 </div>

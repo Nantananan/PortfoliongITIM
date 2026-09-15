@@ -124,88 +124,85 @@
     crowBtn.addEventListener('mouseenter', playCaw);
   }
 
-  // 3. Chat AI Logic (Guarded to prevent errors if elements are missing)
-  const chatSubmit = document.getElementById('chat-submit');
-  const chatInput = document.getElementById('chat-input');
-  const chatHistory = document.getElementById('chat-history');
+  // 3. Configurable Ink Crow chatbot
+  const chatRoot = document.getElementById('ink-crow-chat');
+  const chatSend = document.querySelector('[data-chat-send]');
+  const chatInput = document.querySelector('[data-chat-input]');
+  const chatHistory = document.querySelector('[data-chat-history]');
 
-  if (chatSubmit && chatInput && chatHistory) {
-    
-    let isWaiting = false;
-    let conversation = [];
+  const defaultChatConfig = {
+    behavior: 'You are the Ink Crow. Be concise, warm, mysterious, and helpful. Stay focused on the portfolio owner and the knowledge below.',
+    responses: 'Answer in one or two short sentences. If the answer is not in the knowledge base, say so honestly and invite the visitor to ask about skills, projects, or contact details.',
+    knowledge: "Renan Clint is an Information Technology student in Pasay City.\nRenan is the Secretary of the Junior Philippine Computer Society and a Dean's Lister.\nRenan is building WellPath, an AI-powered wellness monitoring and chronic disease risk prediction capstone project.\nOther projects include an Interactive Lesson Reviewer and a Pixel-World Portfolio.\nVisitors can reach Renan through the social links on this page."
+  };
+  let chatConfig = defaultChatConfig;
+  let conversation = [];
+  let isWaiting = false;
 
-    const handleChatSubmit = async () => {
-      const text = chatInput.value.trim();
-      if (!text || isWaiting) return;
+  if (chatRoot && chatSend && chatInput && chatHistory) {
+    try { chatConfig = { ...defaultChatConfig, ...JSON.parse(localStorage.getItem('ink-crow-chat-config') || '{}') }; } catch (_) {}
 
-      // Add user message to UI
-      const userDiv = document.createElement('div');
-      userDiv.className = 'chat-msg user-msg';
-      userDiv.textContent = text;
-      chatHistory.appendChild(userDiv);
-      chatInput.value = '';
-      chatHistory.scrollTop = chatHistory.scrollHeight;
-
-      // Add loading state
-      const loadDiv = document.createElement('div');
-      loadDiv.className = 'chat-msg ai-msg';
-      loadDiv.innerHTML = '<i>*ruffles feathers thinking...*</i>';
-      chatHistory.appendChild(loadDiv);
-      chatHistory.scrollTop = chatHistory.scrollHeight;
-
-      isWaiting = true;
-
-      try {
-        const apiKey = ""; 
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-        
-        conversation.push({ role: "user", parts: [{ text: text }] });
-
-        const payload = {
-          contents: conversation,
-          systemInstruction: {
-            parts: [{ text: "You are the Ink Crow, a mystical, poetic raven drawn in ink. You live on the portfolio website of Renan Clint. Renan is an IT student in Pasay City, JPCS Secretary, Dean's Lister, and creator of WellPath (an AI wellness app). Answer questions about him briefly and somewhat mysteriously, keeping your responses to 1 or 2 short sentences. Caw occasionally." }]
-          },
-        };
-
-        const response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-
-        const result = await response.json();
-        const candidate = result.candidates?.[0];
-        
-        loadDiv.remove();
-
-        if (candidate && candidate.content?.parts?.[0]?.text) {
-          const aiText = candidate.content.parts[0].text;
-          const aiDiv = document.createElement('div');
-          aiDiv.className = 'chat-msg ai-msg';
-          aiDiv.textContent = aiText;
-          chatHistory.appendChild(aiDiv);
-          conversation.push(candidate.content);
-          if (typeof playCaw === 'function') playCaw();
-        } else {
-          throw new Error("Invalid response");
-        }
-      } catch (error) {
-        loadDiv.remove();
-        const errDiv = document.createElement('div');
-        errDiv.className = 'chat-msg ai-msg';
-        errDiv.innerHTML = '<i>*Croak* The magic ink is dry right now. (API Error)</i>';
-        chatHistory.appendChild(errDiv);
-      }
-
-      isWaiting = false;
+    const addMessage = (role, text) => {
+      const message = document.createElement('div');
+      message.className = `chat-msg ${role === 'assistant' ? 'ai-msg' : 'user-msg'}`;
+      message.textContent = text;
+      chatHistory.appendChild(message);
       chatHistory.scrollTop = chatHistory.scrollHeight;
     };
+    addMessage('assistant', 'Caw. I am the Ink Crow. Ask me about Renan, his work, or the ideas in this portfolio.');
 
-    chatSubmit.addEventListener('click', handleChatSubmit);
-    chatInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') handleChatSubmit();
-    });
+    const localReply = (question) => {
+      const query = question.toLowerCase();
+      const entries = chatConfig.knowledge.split(/\n+/).map(line => line.trim()).filter(Boolean);
+      const words = query.match(/[a-z0-9']+/g) || [];
+      const ranked = entries.map(entry => ({ entry, score: words.reduce((sum, word) => sum + (word.length > 2 && entry.toLowerCase().includes(word) ? 1 : 0), 0) })).sort((a, b) => b.score - a.score);
+      if (ranked[0] && ranked[0].score > 0) return `${ranked[0].entry} Caw.`;
+      if (/hello|hi|hey|caw/.test(query)) return 'Caw, visitor. The ink is listening. What would you like to know?';
+      if (/skill|tech|study|school|about|who/.test(query)) return "Renan is an IT student, JPCS Secretary, and Dean's Lister. Ask me about a project for more detail.";
+      if (/project|work|build|wellpath/.test(query)) return "WellPath is Renan's AI wellness monitoring and chronic disease risk prediction capstone project.";
+      return 'The answer is not written in my current knowledge pages. Try asking about Renan, WellPath, projects, skills, or contact details.';
+    };
+
+    const handleChatSubmit = async () => {
+      const question = chatInput.value.trim();
+      if (!question || isWaiting) return;
+      addMessage('user', question);
+      chatInput.value = '';
+      isWaiting = true;
+      const thinking = document.createElement('div');
+      thinking.className = 'chat-msg ai-msg';
+      thinking.textContent = '*ruffles feathers thinking...*';
+      chatHistory.appendChild(thinking);
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000);
+      try {
+        conversation.push({ role: 'user', parts: [{ text: question }] });
+        const response = await fetch('/api/chat', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          signal: controller.signal,
+          body: JSON.stringify({ question, conversation: conversation.slice(-12), config: chatConfig })
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || `Chat request failed: ${response.status}`);
+        const answer = result.answer;
+        if (!answer) throw new Error('Empty Gemini response');
+        conversation.push({ role: 'model', parts: [{ text: answer }] });
+        thinking.remove();
+        addMessage('assistant', answer);
+        playCaw();
+      } catch (error) {
+        thinking.remove();
+        const reason = error.name === 'AbortError' ? 'Gemini took too long to respond.' : 'Gemini is unavailable right now.';
+        addMessage('assistant', `${localReply(question)} (${reason} Using local mode. Check the Vercel GEMINI_API_KEY setting.)`);
+      } finally {
+        clearTimeout(timeoutId);
+        thinking.remove();
+        isWaiting = false;
+      }
+    };
+    chatSend.addEventListener('click', handleChatSubmit);
+    chatInput.addEventListener('keydown', event => { if (event.key === 'Enter') handleChatSubmit(); });
   }
 
   // 4. Easter Egg: Type "rise" to pan up from the ground
