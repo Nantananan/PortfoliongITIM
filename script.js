@@ -183,8 +183,8 @@
           signal: controller.signal,
           body: JSON.stringify({ question, conversation: conversation.slice(-12), config: chatConfig })
         });
-        const result = await response.json();
-        if (!response.ok) throw new Error(result.error || `Chat request failed: ${response.status}`);
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(result.error || `Chat API returned HTTP ${response.status}`);
         const answer = result.answer;
         if (!answer) throw new Error('Empty Gemini response');
         conversation.push({ role: 'model', parts: [{ text: answer }] });
@@ -193,8 +193,8 @@
         playCaw();
       } catch (error) {
         thinking.remove();
-        const reason = error.name === 'AbortError' ? 'Gemini took too long to respond.' : 'Gemini is unavailable right now.';
-        addMessage('assistant', `${localReply(question)} (${reason} Using local mode. Check the Vercel GEMINI_API_KEY setting.)`);
+        const reason = error.name === 'AbortError' ? 'The chat request timed out.' : (error.message || 'The chat API is unavailable.');
+        addMessage('assistant', `${localReply(question)} (Fallback: ${reason})`);
       } finally {
         clearTimeout(timeoutId);
         thinking.remove();
