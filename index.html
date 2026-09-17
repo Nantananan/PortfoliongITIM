@@ -6,11 +6,19 @@
 <title>Renan Clint — Portfolio</title>
 <link rel="stylesheet" href="style.css">
 </head>
-<body class="intro-active">
+<body class="pre-ui-active">
 
 <!-- Custom ink cursor -->
 <div class="cursor-ring" id="cursor-ring"></div>
 <div class="cursor-dot" id="cursor-dot"></div>
+
+<!-- Flash Overlay -->
+<div id="flash-bang"></div>
+
+<!-- Pre-UI Interaction Layer -->
+<div id="pre-ui-layer">
+  <span class="pre-ui-text">Click to Awaken</span>
+</div>
 
 <!-- Social links, pinned corner -->
 <div class="social-links">
@@ -36,18 +44,20 @@
 <div class="stage">
   <div class="composition">
     
-    <!-- 1. Star / Sun (Top Left) -->
-    <div class="icon-btn" id="btn-sun" data-modal="about">
-      <div class="icon-slot">
-        <img src="assets/SAN.png" alt="Star" class="ink-img"  />
+    <!-- 1. Star / Sun (Top Left, handles translation separate from floating) -->
+    <div class="icon-btn" id="btn-sun-wrapper" data-modal="about">
+      <div id="btn-sun-anim">
+        <div class="icon-slot">
+          <img src="assets/SAN.png" alt="Star" class="ink-img" onerror="this.src='https://placehold.co/330x330/transparent/black?text=Sun'" />
+        </div>
       </div>
     </div>
 
-    <!-- 3. Lantern (Top Middle, Hanging) -->
+    <!-- 3. Lantern (Top Middle, Hanging from high up) -->
     <div class="icon-btn" id="btn-hand" data-modal="projects">
       <div class="chain"></div>
       <div class="icon-slot">
-        <img src="assets/Lantern.png" alt="Lantern" class="ink-img" />
+        <img src="assets/Lantern.png" alt="Lantern" class="ink-img" onerror="this.src='https://placehold.co/110x130/transparent/black?text=Lantern'" />
       </div>
     </div>
 
@@ -56,11 +66,11 @@
     <div class="outline-group" id="group-left">
       <div class="icon-btn grounded-icon" id="btn-tree" data-modal="certifications">
         <div class="icon-slot">
-          <img src="assets/Mushroom.png" alt="Mushroom" class="ink-img" />
+          <img src="assets/Mushroom.png" alt="Mushroom" class="ink-img" onerror="this.src='https://placehold.co/140x140/transparent/black?text=Mushroom'" />
         </div>
       </div>
       <div class="name-outline-placeholder">
-        <img src="assets/RENAN.png" alt="name" class="ink-img" />
+        <img src="assets/RENAN.png" alt="name" class="ink-img" onerror="this.src='https://placehold.co/350x150/transparent/black?text=RENAN'" />
       </div>
     </div>
 
@@ -68,11 +78,11 @@
     <div class="outline-group" id="group-right">
       <div class="icon-btn grounded-icon" id="btn-bird" data-modal="contact">
         <div class="icon-slot">
-          <img src="assets/Crow.png" alt="Crow" class="ink-img"/>
+          <img src="assets/Crow.png" alt="Crow" class="ink-img" onerror="this.src='https://placehold.co/160x140/transparent/black?text=Crow'" />
         </div>
       </div>
       <div class="name-outline-placeholder">
-        <img src="assets/CLINT.png" alt="name" class="ink-img" />
+        <img src="assets/CLINT.png" alt="name" class="ink-img" onerror="this.src='https://placehold.co/350x150/transparent/black?text=CLINT'" />
       </div>
     </div>
 
@@ -88,12 +98,45 @@
 <!-- ABOUT -->
 <div class="overlay" id="overlay-about">
   <div class="modal">
-    <button class="close" data-close>CLOSE &#10005;</button>
+    <button class="close" data-close> &#10005;</button>
     <div class="modal-content">
       <div class="spec-id mono">ABOUT ME</div>
-      <h2>Renan Clint</h2>
-      <p>Information Technology student in Pasay City, Secretary of the Junior Philippine Computer Society, and a Dean's Lister. Outside of coursework, I draw in ink — mostly stippling and fine linework.</p>
-      <p>Currently building WellPath, an AI-powered wellness monitoring and chronic disease risk prediction system, as my capstone project.</p>
+
+      <div class="about-header">
+        <img src="assets/profile.jpg" alt="Renan Clint Edis" class="about-photo" onerror="this.src='https://placehold.co/90x90/eeeeee/000000?text=RC'" />
+        <div>
+          <h2>Renan Clint Edis</h2>
+          <div class="location-pin">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6.1-7-11a7 7 0 1 1 14 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            <span>Pasay City</span>
+          </div>
+        </div>
+      </div>
+
+      <p>Information Technology student with a proven track record of academic excellence. I am deeply passionate about creating engaging and intuitive digital experiences.</p>
+      <p>When I'm not shipping features, I'm usually sketching, prototyping interface ideas in a notebook, or hunting down the perfect shade of blue.</p>
+
+      <div class="about-subhead mono">EDUCATION &amp; AFFILIATION</div>
+      <div class="edu-item">
+        <div class="t">Bachelor of Science in Information Technology</div>
+        <div class="d">Add a short description here — school name, years attended, focus area, honors, etc.</div>
+      </div>
+      <div class="edu-item">
+        <div class="t">JPCS 1st Year Representative</div>
+        <div class="d">Add a short description here — what the role involved, term, achievements.</div>
+      </div>
+      <div class="edu-item">
+        <div class="t">JPCS Interim Secretary</div>
+        <div class="d">Add a short description here — what the role involved, term, achievements.</div>
+      </div>
+
+      <div class="about-subhead mono">SKILLS</div>
+      <div class="skills-marquee">
+        <div class="skills-track">
+          <span>JavaScript</span><span>React</span><span>TypeScript</span><span>Java</span><span>Figma</span><span>CSS/SCSS</span><span>SQL</span><span>Canva</span><span>Illustrations</span><span>Design</span>
+          <span>JavaScript</span><span>React</span><span>TypeScript</span><span>Java</span><span>Figma</span><span>CSS/SCSS</span><span>SQL</span><span>Canva</span><span>Illustrations</span><span>Design</span>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -101,14 +144,76 @@
 <!-- CERTIFICATIONS -->
 <div class="overlay" id="overlay-certifications">
   <div class="modal">
-    <button class="close" data-close>CLOSE &#10005;</button>
+    <button class="close cert-close" data-close>&#10005;</button>
     <div class="modal-content">
-      <div class="spec-id mono">CERTIFICATIONS &amp; SERVICES</div>
-      <h2>Growth &amp; credentials</h2>
-      <div class="skill-row"><span>Dean's Lister</span><span>ongoing</span></div>
-      <div class="skill-row"><span>JPCS Secretary</span><span>current</span></div>
-      <div class="skill-row"><span>Certification name</span><span>year</span></div>
+      <div class="cert-title-row">
+        <h2 class="cert-title">CERTIFICATES</h2>
+        <span class="cert-subtitle mono">//Credentials</span>
+      </div>
+
+      <div class="cert-grid">
+        <div class="cert-card">
+          <div class="cert-tag">Education</div>
+          <div class="cert-name">B.S. Information Technology</div>
+          <span class="cert-link is-disabled">WIP!</span>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-tag">Extra Curricular</div>
+          <div class="cert-name">JPCS Member</div>
+          <button type="button" class="cert-link" data-cert-view="Certs/1.png"><img src="Certs/1.png" alt="" class="cert-thumb" onerror="this.style.display='none'" />Certificate</button>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-tag">Certificate</div>
+          <div class="cert-name">Canva For Design</div>
+          <button type="button" class="cert-link" data-cert-view="Certs/2.png"><img src="Certs/2.png" alt="" class="cert-thumb" onerror="this.style.display='none'" />Certificate</button>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-tag">Certificate</div>
+          <div class="cert-name">Figma for UI/UX</div>
+          <button type="button" class="cert-link" data-cert-view="Certs/3.png"><img src="Certs/3.png" alt="" class="cert-thumb" onerror="this.style.display='none'" />Certificate</button>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-tag">Certificate</div>
+          <div class="cert-name">JAVA &amp; C++</div>
+          <button type="button" class="cert-link" data-cert-view="Certs/4.png"><img src="Certs/4.png" alt="" class="cert-thumb" onerror="this.style.display='none'" />Certificate</button>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-tag">Certificate</div>
+          <div class="cert-name">Web Design</div>
+          <button type="button" class="cert-link" data-cert-view="Certs/5.png"><img src="Certs/5.png" alt="" class="cert-thumb" onerror="this.style.display='none'" />Certificate</button>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-tag">Certificate</div>
+          <div class="cert-name">JavaScript Fundamentals</div>
+          <button type="button" class="cert-link" data-cert-view="Certs/6.png"><img src="Certs/6.png" alt="" class="cert-thumb" onerror="this.style.display='none'" />Certificate</button>
+        </div>
+
+        <div class="cert-card">
+          <div class="cert-tag">Certificate</div>
+          <div class="cert-name">Python Fundamentals</div>
+          <button type="button" class="cert-link" data-cert-view="Certs/7.png"><img src="Certs/7.png" alt="" class="cert-thumb" onerror="this.style.display='none'" />Certificate</button>
+        </div>
+      </div>
     </div>
+  </div>
+</div>
+
+<!-- CERTIFICATE VIEWER (opens on top of a certificate card click) -->
+<div class="overlay" id="overlay-cert-viewer">
+  <button class="cert-viewer-close" data-close>&#10005;</button>
+  <div class="cert-viewer-stack">
+    <div class="modal cert-viewer-modal">
+      <div class="modal-content cert-viewer-content">
+        <img src="" alt="Certificate" id="cert-viewer-img" />
+      </div>
+    </div>
+    <div class="cert-viewer-caption mono" id="cert-viewer-caption"></div>
   </div>
 </div>
 
@@ -145,13 +250,12 @@
     <div class="modal-content">
       <div class="spec-id mono">CONTACT / ASK THE CROW</div>
       <h2>Ask the Ink Crow</h2>
-      <p class="chat-intro">Click the crow anytime to open this conversation. Tune the crow's voice and reference pages below; settings are saved in this browser.</p>
       <div class="chat-container" id="ink-crow-chat">
         <div class="chat-history" data-chat-history>
         </div>
         <div class="chat-input-area">
-          <input type="text" data-chat-input placeholder="Ask the crow..." autocomplete="off" />
-          <button type="button" data-chat-send>Ask</button>
+          <input type="text" data-chat-input placeholder="Ask the crow..." autocomplete="off" id="chat-input" />
+          <button type="button" data-chat-send id="chat-submit">Ask</button>
         </div>
       </div>
     </div>

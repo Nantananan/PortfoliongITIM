@@ -1,11 +1,59 @@
-// 1. Manage Intro Sequence
-  setTimeout(() => {
-    document.body.classList.remove('intro-active');
-  }, 2000);
+// 1. Manage Pre-UI to Intro Sequence
+  const body = document.body;
+  const preUiLayer = document.getElementById('pre-ui-layer');
+  const flashBang = document.getElementById('flash-bang');
+
+  preUiLayer.addEventListener('click', () => {
+    // Disable clicks during transition
+    preUiLayer.style.pointerEvents = 'none';
+    
+    // Hide "Click to Awaken" text immediately
+    const textLayer = document.querySelector('.pre-ui-text');
+    if(textLayer) textLayer.style.opacity = '0';
+    
+    // Trigger the sun's explosive scale and white-out effect
+    const sunWrapper = document.getElementById('btn-sun-wrapper');
+    sunWrapper.classList.add('flash-explode');
+    
+    // Wait for the sun to swell and blind the camera (~600ms)
+    setTimeout(() => {
+      // Trigger solid white overlay just as sun peaks, hiding the layout swap
+      flashBang.classList.add('flash-active');
+      
+      setTimeout(() => {
+        // Swap core UI classes while screen is entirely white
+        body.classList.remove('pre-ui-active');
+        body.classList.add('intro-active');
+        
+        // Snap the sun instantly to its final position behind the flashbang
+        sunWrapper.style.transition = 'none';
+        sunWrapper.classList.remove('flash-explode');
+        
+        // Force the browser to apply the snap immediately
+        void sunWrapper.offsetWidth;
+        
+        // Restore standard transitions for future hover effects
+        sunWrapper.style.transition = '';
+        
+        // Begin the fade down of the flashbang overlay directly to the landing page
+        flashBang.classList.remove('flash-active'); 
+        preUiLayer.style.opacity = '0'; 
+        
+        // Cleanup intro classes after the fade is complete
+        setTimeout(() => {
+          body.classList.remove('intro-active');
+          preUiLayer.remove(); 
+          flashBang.remove();
+        }, 1500);
+      }, 50); // Keep flash solid for 50ms to ensure clean swap
+    }, 550); // Fire slightly before the 650ms explosion ends to seamlessly blend
+  });
 
   // 2. Modal Open/Close Logic
   document.querySelectorAll('.icon-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
+      // Prevent opening modals if Pre-UI is active
+      if (body.classList.contains('pre-ui-active')) return;
       e.preventDefault();
       const id = 'overlay-' + btn.dataset.modal;
       const modal = document.getElementById(id);
@@ -16,6 +64,24 @@
   document.querySelectorAll('[data-close]').forEach(btn => {
     btn.addEventListener('click', () => {
       btn.closest('.overlay').classList.remove('open');
+    });
+  });
+
+  // 2b. Certificate viewer — clicking a card's "Certificate" link shows the image
+  const certViewer = document.getElementById('overlay-cert-viewer');
+  const certViewerImg = document.getElementById('cert-viewer-img');
+  const certViewerCaption = document.getElementById('cert-viewer-caption');
+  document.querySelectorAll('[data-cert-view]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const src = btn.dataset.certView;
+      if (!src || !certViewer || !certViewerImg) return;
+      certViewerImg.src = src;
+      if (certViewerCaption) {
+        const card = btn.closest('.cert-card');
+        const title = card ? card.querySelector('.cert-name')?.textContent : '';
+        certViewerCaption.textContent = title || '';
+      }
+      certViewer.classList.add('open');
     });
   });
 
@@ -31,7 +97,7 @@
     }
   });
 
-  // 2b. Custom ink cursor
+  // 3. Custom ink cursor
   const cursorDot = document.getElementById('cursor-dot');
   const cursorRing = document.getElementById('cursor-ring');
   if (cursorDot && cursorRing && window.matchMedia('(pointer: fine)').matches) {
@@ -52,7 +118,7 @@
     }
     animateRing();
 
-    const hoverTargets = 'a, button, .icon-btn, .social-icon, .close, .chat-msg, .chat-input, .chat-submit';
+    const hoverTargets = 'a, button, .icon-btn, .social-icon, .close, .chat-msg, #chat-input, #chat-submit, #pre-ui-layer, .cert-card';
     document.querySelectorAll(hoverTargets).forEach(el => {
       el.addEventListener('mouseenter', () => cursorRing.classList.add('hover'));
       el.addEventListener('mouseleave', () => cursorRing.classList.remove('hover'));
@@ -68,7 +134,7 @@
     });
   }
 
-  // 2c. Crow caw — synthesized with the Web Audio API, no audio file needed
+  // 4. Crow caw — synthesized with Web Audio API
   let audioCtx;
   function playCaw() {
     try {
@@ -124,24 +190,17 @@
     crowBtn.addEventListener('mouseenter', playCaw);
   }
 
-  // 3. Configurable Ink Crow chatbot
+  // 5. Ink Crow Chatbot Integration
   const chatRoot = document.getElementById('ink-crow-chat');
   const chatSend = document.querySelector('[data-chat-send]');
   const chatInput = document.querySelector('[data-chat-input]');
   const chatHistory = document.querySelector('[data-chat-history]');
 
-  const defaultChatConfig = {
-    behavior: 'You are the Ink Crow. Be concise, warm, mysterious, and helpful. Stay focused on the portfolio owner and the knowledge below.',
-    responses: 'Answer in one or two short sentences. If the answer is not in the knowledge base, say so honestly and invite the visitor to ask about skills, projects, or contact details.',
-    knowledge: "Renan Clint is an Information Technology student in Pasay City.\nRenan is the Secretary of the Junior Philippine Computer Society and a Dean's Lister.\nRenan is building WellPath, an AI-powered wellness monitoring and chronic disease risk prediction capstone project.\nOther projects include an Interactive Lesson Reviewer and a Pixel-World Portfolio.\nVisitors can reach Renan through the social links on this page."
-  };
-  let chatConfig = defaultChatConfig;
+  const chatKnowledge = "Renan Clint is an Information Technology student in Pasay City. Renan is the Secretary of the Junior Philippine Computer Society and a Dean's Lister. Renan is building WellPath, an AI-powered wellness monitoring and chronic disease risk prediction capstone project. Other projects include an Interactive Lesson Reviewer and a Pixel-World Portfolio. Visitors can reach Renan through the social links on this page.";
   let conversation = [];
   let isWaiting = false;
 
   if (chatRoot && chatSend && chatInput && chatHistory) {
-    try { chatConfig = { ...defaultChatConfig, ...JSON.parse(localStorage.getItem('ink-crow-chat-config') || '{}') }; } catch (_) {}
-
     const addMessage = (role, text) => {
       const message = document.createElement('div');
       message.className = `chat-msg ${role === 'assistant' ? 'ai-msg' : 'user-msg'}`;
@@ -151,69 +210,79 @@
     };
     addMessage('assistant', 'Caw. I am the Ink Crow. Ask me about Renan, his work, or the ideas in this portfolio.');
 
+    // Fallback response for missing API
     const localReply = (question) => {
       const query = question.toLowerCase();
-      const entries = chatConfig.knowledge.split(/\n+/).map(line => line.trim()).filter(Boolean);
-      const words = query.match(/[a-z0-9']+/g) || [];
-      const ranked = entries.map(entry => ({ entry, score: words.reduce((sum, word) => sum + (word.length > 2 && entry.toLowerCase().includes(word) ? 1 : 0), 0) })).sort((a, b) => b.score - a.score);
-      if (ranked[0] && ranked[0].score > 0) return `${ranked[0].entry} Caw.`;
       if (/hello|hi|hey|caw/.test(query)) return 'Caw, visitor. The ink is listening. What would you like to know?';
       if (/skill|tech|study|school|about|who/.test(query)) return "Renan is an IT student, JPCS Secretary, and Dean's Lister. Ask me about a project for more detail.";
       if (/project|work|build|wellpath/.test(query)) return "WellPath is Renan's AI wellness monitoring and chronic disease risk prediction capstone project.";
-      return 'The answer is not written in my current knowledge pages. Try asking about Renan, WellPath, projects, skills, or contact details.';
+      return 'I cannot answer that right now. Try asking about Renan, WellPath, projects, skills, or contact details.';
     };
 
     const handleChatSubmit = async () => {
       const question = chatInput.value.trim();
       if (!question || isWaiting) return;
+      
       addMessage('user', question);
       chatInput.value = '';
       isWaiting = true;
+      
       const thinking = document.createElement('div');
       thinking.className = 'chat-msg ai-msg';
       thinking.textContent = '*ruffles feathers thinking...*';
       chatHistory.appendChild(thinking);
 
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 15000);
       try {
-        conversation.push({ role: 'user', parts: [{ text: question }] });
-        const response = await fetch('/api/chat', {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          signal: controller.signal,
-          body: JSON.stringify({ question, conversation: conversation.slice(-12), config: chatConfig })
+        const apiKey = ""; // Add Gemini API key if required for testing standalone
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+        
+        conversation.push({ role: "user", parts: [{ text: question }] });
+
+        const payload = {
+          contents: conversation,
+          systemInstruction: {
+            parts: [{ text: `You are the Ink Crow. Be concise, warm, mysterious, and helpful. Use this knowledge: ${chatKnowledge}` }]
+          },
+        };
+
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
         });
-        const result = await response.json().catch(() => ({}));
-        if (!response.ok) throw new Error(result.error || `Chat API returned HTTP ${response.status}`);
-        const answer = result.answer;
-        if (!answer) throw new Error('Empty Gemini response');
-        conversation.push({ role: 'model', parts: [{ text: answer }] });
+
+        const result = await response.json();
+        const candidate = result.candidates?.[0];
+        
         thinking.remove();
-        addMessage('assistant', answer);
-        playCaw();
+
+        if (candidate && candidate.content?.parts?.[0]?.text) {
+          const aiText = candidate.content.parts[0].text;
+          addMessage('assistant', aiText);
+          conversation.push(candidate.content);
+          playCaw();
+        } else {
+          throw new Error("Invalid response");
+        }
       } catch (error) {
         thinking.remove();
-        const reason = error.name === 'AbortError' ? 'The chat request timed out.' : (error.message || 'The chat API is unavailable.');
-        addMessage('assistant', `${localReply(question)} (Fallback: ${reason})`);
-      } finally {
-        clearTimeout(timeoutId);
-        thinking.remove();
-        isWaiting = false;
+        addMessage('assistant', `${localReply(question)} (API unavailable)`);
       }
+
+      isWaiting = false;
     };
+    
     chatSend.addEventListener('click', handleChatSubmit);
     chatInput.addEventListener('keydown', event => { if (event.key === 'Enter') handleChatSubmit(); });
   }
 
-  // 4. Easter Egg: Type "rise" to pan up from the ground
+  // 6. Easter Egg: Type "rise" to pan up from the ground
   let keystrokeBuffer = '';
   const secretWord = 'rise';
   
   document.addEventListener('keydown', (e) => {
-    // Ignore typing if the user is actively using the chatbox or other inputs
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
     
-    // Track only alphabetical keys
     if (e.key.length === 1 && e.key.match(/[a-z]/i)) {
       keystrokeBuffer += e.key.toLowerCase();
       
