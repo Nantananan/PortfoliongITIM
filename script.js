@@ -3,6 +3,15 @@
   const preUiLayer = document.getElementById('pre-ui-layer');
   const flashBang = document.getElementById('flash-bang');
 
+  function spawnRipple(delay) {
+    setTimeout(() => {
+      const ripple = document.createElement('div');
+      ripple.className = 'flash-ripple';
+      document.body.appendChild(ripple);
+      ripple.addEventListener('animationend', () => ripple.remove());
+    }, delay);
+  }
+
   preUiLayer.addEventListener('click', () => {
     // Disable clicks during transition
     preUiLayer.style.pointerEvents = 'none';
@@ -19,7 +28,11 @@
     setTimeout(() => {
       // Trigger solid white overlay just as sun peaks, hiding the layout swap
       flashBang.classList.add('flash-active');
-      
+
+      // Two staggered ink ripples pulse outward from center right as everything goes white
+      spawnRipple(0);
+      spawnRipple(90);
+
       setTimeout(() => {
         // Swap core UI classes while screen is entirely white
         body.classList.remove('pre-ui-active');
@@ -132,6 +145,45 @@
       cursorDot.style.opacity = '1';
       cursorRing.style.opacity = '0.6';
     });
+
+    // Ink splatter burst on click — a small cluster of irregular blots
+    document.addEventListener('mousedown', (e) => {
+      if (body.classList.contains('pre-ui-active')) return; // don't splatter over the awaken screen
+      spawnInkSplat(e.clientX, e.clientY);
+    });
+  }
+
+  function spawnInkSplat(x, y) {
+    const splat = document.createElement('div');
+    splat.className = 'ink-splat';
+    splat.style.left = x + 'px';
+    splat.style.top = y + 'px';
+
+    const blotCount = 5 + Math.floor(Math.random() * 3); // 5–7 blots per burst
+    for (let i = 0; i < blotCount; i++) {
+      const blot = document.createElement('div');
+      blot.className = 'blot';
+
+      const size = 4 + Math.random() * 14;
+      const angle = Math.random() * Math.PI * 2;
+      const dist = Math.random() * 22;
+      const offsetX = Math.cos(angle) * dist;
+      const offsetY = Math.sin(angle) * dist;
+      const delay = Math.random() * 0.06;
+      const rotate = Math.floor(Math.random() * 360);
+
+      blot.style.width = size + 'px';
+      blot.style.height = size + 'px';
+      blot.style.left = offsetX + 'px';
+      blot.style.top = offsetY + 'px';
+      blot.style.animationDelay = delay + 's';
+      blot.style.transform = `translate(-50%, -50%) rotate(${rotate}deg)`;
+
+      splat.appendChild(blot);
+    }
+
+    document.body.appendChild(splat);
+    setTimeout(() => splat.remove(), 750);
   }
 
   // 4. Crow caw — synthesized with Web Audio API

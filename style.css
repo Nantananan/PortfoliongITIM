@@ -45,6 +45,30 @@
     .cursor-dot, .cursor-ring { display: none; }
   }
 
+  /* Ink splatter — spawned on click, a cluster of irregular blots that bloom then fade */
+  .ink-splat {
+    position: fixed;
+    top: 0; left: 0;
+    width: 1px; height: 1px;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+  }
+  .ink-splat .blot {
+    position: absolute;
+    top: 0; left: 0;
+    background: var(--line);
+    border-radius: 42% 58% 62% 38% / 45% 40% 60% 55%;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+    animation: splat-bloom 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  @keyframes splat-bloom {
+    0%   { opacity: 0.85; transform: translate(-50%, -50%) scale(0); }
+    12%  { opacity: 0.85; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(1.15); }
+  }
+
   html, body {
     height: 100%;
     overflow: hidden;
@@ -132,8 +156,8 @@
   }
 
   #btn-sun-wrapper:hover #btn-sun-anim .ink-img {
-    filter: grayscale(1) drop-shadow(0 0 15px rgba(0,0,0,0.6));
-    transform: scale(1.1) rotate(5deg);
+    filter: grayscale(1);
+    transform: scale(1.1);
   }
 
   @keyframes float-sun {
@@ -162,17 +186,47 @@
   #btn-sun-wrapper.flash-explode {
     top: 50% !important;
     left: 50% !important;
-    /* Massive scale up directly into the camera */
-    transform: translate(-50%, -50%) scale(35) !important;
-    transition: transform 0.65s cubic-bezier(0.7, 0, 1, 1) !important;
     z-index: 9999;
+    /* A brief anticipatory pull-back before the explosive scale, then overshoot slightly */
+    animation: sun-anticipate-explode 0.65s cubic-bezier(0.7, 0, 0.84, 0) forwards;
+  }
+  @keyframes sun-anticipate-explode {
+    0%   { transform: translate(-50%, -50%) scale(1); }
+    18%  { transform: translate(-50%, -50%) scale(0.85); }
+    100% { transform: translate(-50%, -50%) scale(35); }
   }
   #btn-sun-wrapper.flash-explode .ink-img {
     /* Invert to pure white, blast brightness, and stop multiply blend */
     mix-blend-mode: normal !important;
-    filter: invert(1) brightness(20) blur(2px) drop-shadow(0 0 10px white) !important;
-    transition: filter 0.65s cubic-bezier(0.7, 0, 1, 1), mix-blend-mode 0s !important;
+    animation: sun-ink-flare 0.65s cubic-bezier(0.7, 0, 0.84, 0) forwards;
   }
+  @keyframes sun-ink-flare {
+    0%   { filter: grayscale(1) contrast(1.2) blur(0px) brightness(1); }
+    18%  { filter: grayscale(1) contrast(1.4) blur(0px) brightness(1.1); }
+    100% { filter: invert(1) brightness(20) blur(2px) drop-shadow(0 0 10px white); }
+  }
+
+  /* Ink ripple rings that pulse outward from center as the flash peaks */
+  .flash-ripple {
+    position: fixed;
+    top: 50%; left: 50%;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    border: 2px solid rgba(0,0,0,0.5);
+    transform: translate(-50%, -50%) scale(1);
+    pointer-events: none;
+    z-index: 9001;
+    opacity: 0;
+    animation: ripple-out 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  @keyframes ripple-out {
+    0%   { opacity: 0.7; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(90); }
+  }
+
+  /* Whole composition eases in softly once the flash clears, instead of popping in fully-formed */
+  .composition { opacity: 1; transform: none; transition: opacity 1s ease, transform 1s cubic-bezier(0.25, 1, 0.5, 1); }
+  body.intro-active .composition { opacity: 0; transform: translateY(12px) scale(0.98); }
 
   /* Hide other elements during Pre-UI — only the sun shows */
   body.pre-ui-active .legend,
@@ -273,7 +327,7 @@
   /* Slight glow on the lantern frame */
   #btn-hand:hover .ink-img { 
     transform: scale(1.05);
-    filter: grayscale(1) contrast(1.2) drop-shadow(0 0 8px rgba(255,140,0,0.4)); 
+    filter: grayscale(1) contrast(1.2); 
   }
 
   @keyframes swing {
@@ -300,22 +354,24 @@
   .grounded-icon { position: absolute; z-index: 6; }
 
   #btn-tree {
-    width: 150px; 
-    height: 150px;
-    top: 20px; 
-    left: 65%;
+    width: 160px; 
+    height: 160px;
+    top: 0px; 
+    left: 70%;
     transform: translateX(-50%);
   }
 
-  #btn-tree:hover .ink-img { transform: scale(1.05) rotate(-3deg); }
+  #btn-tree:hover .ink-img { transform: scale(1.05); }
 
   #btn-bird {
-    width: 160px; height: 140px;
-    top: 10px; left: 72%;
+    width: 160px; 
+    height: 140px;
+    top: -40px; 
+    left: 80%;
     transform: translateX(-50%);
   }
 
-  #btn-bird:hover .ink-img { transform: scale(1.05) rotate(3deg); }
+  #btn-bird:hover .ink-img { transform: scale(1.05); }
 
   .name-outline-placeholder {
     display: flex;
@@ -332,7 +388,7 @@
     background: var(--bg);
   }
 
-  .name-outline-placeholder .ink-img { width: 98%; height: 98%; }
+  .name-outline-placeholder .ink-img { width: 100%; height: 100%; }
 
   /* Intro Sequence (Fires after Pre-UI flash) */
   body.intro-active #btn-hand,
