@@ -186,53 +186,70 @@
     setTimeout(() => splat.remove(), 750);
   }
 
-  // 4. Crow caw — synthesized with Web Audio API
-  let audioCtx;
+  // 3b. Cursor-following hover label (speech-bubble style)
+  const hoverLabel = document.createElement('div');
+  hoverLabel.id = 'hover-label';
+  hoverLabel.innerHTML = '<span class="hover-label-text"></span>';
+  document.body.appendChild(hoverLabel);
+  const hoverLabelText = hoverLabel.querySelector('.hover-label-text');
+
+  let hoverLabelX = 0, hoverLabelY = 0;
+  let hoverLabelTargetX = 0, hoverLabelTargetY = 0;
+  let hoverLabelActive = false;
+  let hoverLabelRafStarted = false;
+
+  document.addEventListener('mousemove', (e) => {
+    hoverLabelTargetX = e.clientX;
+    hoverLabelTargetY = e.clientY;
+  });
+
+  function animateHoverLabel() {
+    hoverLabelX += (hoverLabelTargetX - hoverLabelX) * 0.25;
+    hoverLabelY += (hoverLabelTargetY - hoverLabelY) * 0.25;
+    hoverLabel.style.transform = `translate(${hoverLabelX + 22}px, ${hoverLabelY - 18}px)`;
+    if (hoverLabelActive || Math.abs(hoverLabelTargetX - hoverLabelX) > 0.5 || Math.abs(hoverLabelTargetY - hoverLabelY) > 0.5) {
+      requestAnimationFrame(animateHoverLabel);
+    } else {
+      hoverLabelRafStarted = false;
+    }
+  }
+
+  document.querySelectorAll('[data-hover-label]').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      if (body.classList.contains('pre-ui-active')) return;
+      hoverLabelText.innerHTML = el.dataset.hoverLabel;
+      hoverLabelX = hoverLabelTargetX;
+      hoverLabelY = hoverLabelTargetY;
+      hoverLabel.style.transform = `translate(${hoverLabelX + 22}px, ${hoverLabelY - 18}px)`;
+      hoverLabel.classList.add('hover-label-show');
+      hoverLabelActive = true;
+      if (!hoverLabelRafStarted) {
+        hoverLabelRafStarted = true;
+        requestAnimationFrame(animateHoverLabel);
+      }
+    });
+    el.addEventListener('mouseleave', () => {
+      hoverLabel.classList.remove('hover-label-show');
+      hoverLabelActive = false;
+    });
+  });
+
+
+  // 4. Crow caw — plays an imported audio file
+  const cawAudio = new Audio('crow/CawCaw.mp3');
+  cawAudio.volume = 0.7;
+  cawAudio.preload = 'auto';
+
   function playCaw() {
     try {
-      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-
-      const now = audioCtx.currentTime;
-      const duration = 0.28;
-
-      const bufferSize = audioCtx.sampleRate * duration;
-      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-      const data = buffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-        data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
-      }
-      const noise = audioCtx.createBufferSource();
-      noise.buffer = buffer;
-
-      const bandpass = audioCtx.createBiquadFilter();
-      bandpass.type = 'bandpass';
-      bandpass.frequency.setValueAtTime(1400, now);
-      bandpass.frequency.exponentialRampToValueAtTime(500, now + duration);
-      bandpass.Q.value = 2.2;
-
-      const osc = audioCtx.createOscillator();
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(620, now);
-      osc.frequency.exponentialRampToValueAtTime(220, now + duration);
-
-      const oscGain = audioCtx.createGain();
-      oscGain.gain.setValueAtTime(0.15, now);
-      oscGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-
-      const noiseGain = audioCtx.createGain();
-      noiseGain.gain.setValueAtTime(0.5, now);
-      noiseGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-
-      osc.connect(oscGain).connect(audioCtx.destination);
-      noise.connect(bandpass).connect(noiseGain).connect(audioCtx.destination);
-
-      osc.start(now);
-      osc.stop(now + duration);
-      noise.start(now);
-      noise.stop(now + duration);
+      // Clone the node so rapid/overlapping triggers (hover + click) don't cut each other off
+      const sound = cawAudio.cloneNode();
+      sound.volume = cawAudio.volume;
+      sound.play().catch(() => {
+        // Autoplay can be blocked before the user has interacted with the page — fail silently
+      });
     } catch (err) {
-      // Web Audio not available — fail silently
+      // Audio not available — fail silently
     }
   }
 
@@ -328,23 +345,41 @@
     chatInput.addEventListener('keydown', event => { if (event.key === 'Enter') handleChatSubmit(); });
   }
 
-  // 6. Easter Egg: Type "rise" to pan up from the ground
+  // 6. Easter Eggs: type a secret word to trigger something
   let keystrokeBuffer = '';
-  const secretWord = 'rise';
-  
+  const secretWords = ['rise', 'halemaw'];
+  const maxSecretLength = Math.max(...secretWords.map(w => w.length));
+
+  // Popup element for the "halemaw" easter egg
+  const halemawPopup = document.createElement('div');
+  halemawPopup.id = 'halemaw-popup';
+  halemawPopup.innerHTML = '<img src="assets/Imaw.png" alt="Secret" class="halemaw-img" onerror="this.src=\'https://placehold.co/160x160/transparent/black?text=%3F%3F%3F\'" />';
+  document.body.appendChild(halemawPopup);
+  let halemawVisible = false;
+
+  function triggerHalemaw() {
+    halemawVisible = !halemawVisible;
+    halemawPopup.classList.toggle('halemaw-show', halemawVisible);
+    halemawPopup.classList.toggle('halemaw-hide', !halemawVisible);
+    playCaw();
+  }
+
   document.addEventListener('keydown', (e) => {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-    
+
     if (e.key.length === 1 && e.key.match(/[a-z]/i)) {
       keystrokeBuffer += e.key.toLowerCase();
-      
-      if (keystrokeBuffer.length > secretWord.length) {
-        keystrokeBuffer = keystrokeBuffer.slice(-secretWord.length);
+
+      if (keystrokeBuffer.length > maxSecretLength) {
+        keystrokeBuffer = keystrokeBuffer.slice(-maxSecretLength);
       }
-      
-      if (keystrokeBuffer === secretWord) {
+
+      if (keystrokeBuffer.endsWith('rise')) {
         document.body.classList.toggle('rise-active');
-        keystrokeBuffer = ''; 
+        keystrokeBuffer = '';
+      } else if (keystrokeBuffer.endsWith('halemaw')) {
+        triggerHalemaw();
+        keystrokeBuffer = '';
       }
     }
   });

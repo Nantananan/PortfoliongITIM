@@ -142,6 +142,11 @@
     width: 450px;
     height: 450px;
     z-index: 10;
+    /* Restrict the hover/click hit-area to the visible sun disc so the
+       transparent padding around the artwork doesn't overlap neighboring
+       icons (lantern/mushroom). Tweak the % if your sun graphic isn't
+       perfectly centered/round within the box. */
+    clip-path: circle(38% at 50% 50%);
     /* Smooth translation from center to corner */
     transition: top 2s cubic-bezier(0.25, 1, 0.2, 1), 
                 left 2s cubic-bezier(0.25, 1, 0.2, 1), 
@@ -167,6 +172,7 @@
 
   /* --- Pre-UI State Overrides --- */
   body.pre-ui-active #btn-sun-wrapper {
+    position: fixed;
     top: 50%;
     left: 50%;
     /* Translate -50% -50% to precisely center, and scale up to make it dominate the screen */
@@ -184,6 +190,7 @@
 
   /* --- Sun Explosion (Flashbang) --- */
   #btn-sun-wrapper.flash-explode {
+    position: fixed !important;
     top: 50% !important;
     left: 50% !important;
     z-index: 9999;
@@ -356,7 +363,7 @@
   #btn-tree {
     width: 160px; 
     height: 160px;
-    top: 0px; 
+    top: -10px; 
     left: 70%;
     transform: translateX(-50%);
   }
@@ -735,4 +742,123 @@
     .modal { padding: 48px 20px 20px; max-height: 90vh; }
     .modal h2 { font-size: 2rem; }
     .chat-container { height: 220px; }
+  }
+  /* Easter Egg: "Halemaw" — pans up from below and holds; typing it again sends it back down */
+  #halemaw-popup 
+  {
+    position: fixed;
+    top: 110%;
+    left: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, 0) rotate(-4deg);
+  }
+
+  #halemaw-popup.halemaw-show {
+    animation: halemaw-panup 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  #halemaw-popup.halemaw-hide {
+    animation: halemaw-pandown 0.9s cubic-bezier(0.55, 0, 1, 0.45) forwards;
+  }
+
+  .halemaw-img 
+  {
+    width: 250px;
+    height: 250px;
+    object-fit: contain;
+  }
+
+  @keyframes halemaw-panup {
+    0%   { top: 110%; opacity: 0; transform: translate(-50%, 0) rotate(-4deg); }
+    12%  { opacity: 1; }
+    100% { top: calc(50% + 245px); opacity: 1; transform: translate(-50%, 0) rotate(0deg); }
+  }
+
+  @keyframes halemaw-pandown {
+    0%   { top: calc(50% + 245px); opacity: 1; transform: translate(-50%, 0) rotate(0deg); }
+    100% { top: 110%; opacity: 0; transform: translate(-50%, 0) rotate(-4deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #halemaw-popup.halemaw-show,
+    #halemaw-popup.halemaw-hide { animation: none; }
+    #halemaw-popup.halemaw-show { top: 45%; opacity: 1; }
+    #halemaw-popup.halemaw-hide { opacity: 0; }
+  }
+  /* Cursor-following hover label */
+  #hover-label {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9998;
+    pointer-events: none;
+    opacity: 0;
+    transform-origin: left bottom;
+    transition: opacity 0.18s ease, transform 0.05s linear;
+    will-change: transform, opacity;
+  }
+
+  #hover-label.hover-label-show {
+    opacity: 1;
+  }
+
+  .hover-label-text {
+    position: relative;
+    display: inline-block;
+    background: #f4f1ea;
+    color: #0a0a0a;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.02em;
+    padding: 8px 14px;
+    border: 2px solid #0a0a0a;
+    border-radius: 16px 16px 16px 2px;
+    box-shadow: 3px 3px 0 rgba(0,0,0,0.9);
+    white-space: nowrap;
+    transform: rotate(-2deg);
+  }
+
+  /* The tail: two stacked triangles (border color, then fill color inset)
+     pointing down-left, back toward the cursor the bubble is following */
+  .hover-label-text::before,
+  .hover-label-text::after {
+    content: '';
+    position: absolute;
+    left: 14px;
+    bottom: -11px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+  }
+
+  .hover-label-text::before {
+    border-width: 12px 8px 0 0;
+    border-color: #0a0a0a transparent transparent transparent;
+  }
+
+  .hover-label-text::after {
+    left: 16px;
+    bottom: -7px;
+    border-width: 9px 6px 0 0;
+    border-color: #f4f1ea transparent transparent transparent;
+  }
+
+  #hover-label.hover-label-show .hover-label-text {
+    animation: hover-label-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes hover-label-pop {
+    0%   { transform: scale(0.6) rotate(-8deg); }
+    60%  { transform: scale(1.08) rotate(1deg); }
+    100% { transform: scale(1) rotate(-2deg); }
+  }
+
+  @media (max-width: 780px), (pointer: coarse) {
+    #hover-label { display: none; }
   }
