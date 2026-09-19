@@ -80,21 +80,27 @@
     });
   });
 
-  // 2b. Certificate viewer — clicking a card's "Certificate" link shows the image
+  // 2b. Certificate viewer — clicking a card preview shows the full image
   const certViewer = document.getElementById('overlay-cert-viewer');
   const certViewerImg = document.getElementById('cert-viewer-img');
   const certViewerCaption = document.getElementById('cert-viewer-caption');
   document.querySelectorAll('[data-cert-view]').forEach(btn => {
-    btn.addEventListener('click', () => {
+    const openCert = () => {
       const src = btn.dataset.certView;
       if (!src || !certViewer || !certViewerImg) return;
       certViewerImg.src = src;
       if (certViewerCaption) {
-        const card = btn.closest('.cert-card');
-        const title = card ? card.querySelector('.cert-name')?.textContent : '';
-        certViewerCaption.textContent = title || '';
+        certViewerCaption.textContent = btn.dataset.certTitle || '';
       }
       certViewer.classList.add('open');
+    };
+    btn.addEventListener('click', openCert);
+    // These are plain divs now (not <button>), so wire up keyboard activation manually
+    btn.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openCert();
+      }
     });
   });
 
