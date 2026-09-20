@@ -543,7 +543,7 @@
   // like a game of hide-and-seek
   const wallyPopup = document.createElement('div');
   wallyPopup.id = 'wally-popup';
-  wallyPopup.innerHTML = '<img src="assets/Wally.png" alt="Secret" class="wally-img" onerror="this.src=\'https://placehold.co/160x220/transparent/black?text=Wally\'" />';
+  wallyPopup.innerHTML = '<img src="assets/wally.png" alt="Secret" class="wally-img" onerror="this.src=\'https://placehold.co/160x220/transparent/black?text=Wally\'" />';
   document.body.appendChild(wallyPopup);
   let wallyVisible = false;
 
