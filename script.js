@@ -62,6 +62,136 @@
     }, 550); // Fire slightly before the 650ms explosion ends to seamlessly blend
   });
 
+  // 2a. Projects — themed cards rendered into the Projects modal, each
+  //     opening a shared detail modal that re-skins itself per project.
+  const projectData = [
+    {
+      id: 'slotty',
+      theme: 'slotty',
+      glyph: '\u{1F3B0}',
+      tag: 'GAME · UI ANIMATION',
+      title: 'Slotty',
+      blurb: 'A slot-machine mini-game — reel spin physics and a casino-neon feel just for leisures.',
+      desc: 'Slotty is an interactive slot-machine game built to explore reel-spin animation and satisfying win/lose feedback loops. It leans into a high-contrast, casino aesthetic with tactile spin and win animations.',
+      code: 'https://github.com/Nantananan/Slotty',
+      view: 'https://nantananan.github.io/Slotty/'
+    },
+    {
+      id: 'littleprince',
+      theme: 'littleprince',
+      glyph: '\u{1F30C}',
+      tag: 'STORYTELLING · WEB',
+      title: 'Little Prince',
+      blurb: 'A quiet, illustrated web retelling of The Little Prince  scroll-driven scenes under a night sky. illustrated all by <a href="https://erika-dc.github.io/Erika_Portfolio/#contact" target="_blank" rel="noopener" class="inline-link">Huerika</a> ',
+      desc: 'A scroll-driven interactive retelling inspired by The Little Prince, built around soft illustration, gentle parallax, and pacing that mirrors the book\u2019s reflective tone. The night-sky palette and starlit motion carry the mood scene to scene.',
+      code: 'https://github.com/Nantananan/SKIES',
+      view: 'https://nantananan.github.io/SKIES/'
+    },
+    {
+      id: 'halikha',
+      theme: 'halikha',
+      glyph: '\u{2728}',
+      tag: 'CULTURE · WEB APP',
+      title: 'Halikha',
+      blurb: 'A warm, community-rooted web experience with a hand-woven, terracotta visual identity. ',
+      desc: 'Halikha is a web app built around a warm, terracotta-and-linen visual identity inspired by local craft and community. The interface favors soft textures and inviting typography over sharp, corporate UI patterns.',
+      status: 'in-progress',
+      code: '#',
+      view: '#'
+    },
+    {
+      id: 'woord',
+      theme: 'woord',
+      glyph: '\u{1F4D6}',
+      tag: 'WORD GAME · LOGIC',
+      title: 'Woord',
+      blurb: 'A minimalist word-guessing game with clean typography and a Crucible to discover new words. Collaborative Work with <a href="https://cozyportfolio.vercel.app" target="_blank" rel="noopener" class="inline-link">Tyrone Olbes</a>, <a href="https://cozyportfolio.vercel.app" target="_blank" rel="noopener" class="inline-link">Josh Velasco</a>, and <a href="https://rzantua022.github.io/My-Portfolio/#top" target="_blank" rel="noopener" class="inline-link">Ranel Zantua</a> ',
+      desc: 'Woord is a minimalist word-guessing game focused on clean typographic feedback and a Witch themed interface. The emphasis is on fast round-trip logic and a distraction-free board.',
+      status: 'in-progress',
+      code: '#',
+      view: '#'
+    },
+    {
+      id: 'kuyawell',
+      theme: 'kuyawell',
+      glyph: '\u{1FA7A}',
+      tag: 'HEALTH TECH · AI',
+      title: 'KuyaWell',
+      blurb: 'A friendly wellness companion app with a calm clinical-teal interface,.',
+      desc: 'KuyaWell is a wellness-companion app with a calm, clinical-teal interface designed to feel approachable rather than sterile \u2014 built alongside the WellPath capstone\u2019s wellness monitoring and risk-prediction work.',
+      status: 'in-progress',
+      code: '#',
+      view: '#'
+    }
+  ];
+
+  const projectGrid = document.getElementById('project-grid');
+  if (projectGrid) {
+    projectData.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'project-card';
+      card.dataset.theme = p.theme;
+      card.dataset.glyph = p.glyph;
+      card.dataset.hoverLabel = 'VIEW PROJECT &raquo;';
+      card.tabIndex = 0;
+      card.setAttribute('role', 'button');
+      card.setAttribute('aria-label', 'View project: ' + p.title);
+      card.innerHTML = `
+        <div>
+          <div class="pc-tag mono">${p.tag}</div>
+          ${p.status === 'in-progress' ? '<span class="pc-status-badge mono">IN PROGRESS</span>' : ''}
+          <div class="pc-title">${p.title}</div>
+          <div class="pc-blurb">${p.blurb}</div>
+        </div>
+        <div class="pc-cta">Open
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </div>`;
+      projectGrid.appendChild(card);
+    });
+  }
+
+  const projectDetailOverlay = document.getElementById('overlay-project-detail');
+  const projectDetailModal = document.getElementById('project-detail-modal');
+  const pdTag = document.getElementById('pd-tag');
+  const pdTitle = document.getElementById('pd-title');
+  const pdDesc = document.getElementById('pd-desc');
+  const pdGlyph = document.getElementById('pd-glyph');
+  const pdCode = document.getElementById('pd-code');
+  const pdView = document.getElementById('pd-view');
+  const pdStatus = document.getElementById('pd-status');
+
+  function openProjectDetail(project) {
+    if (!projectDetailOverlay || !projectDetailModal) return;
+    projectDetailModal.className = 'modal project-detail-modal theme-' + project.theme;
+    pdTag.textContent = project.tag;
+    pdTitle.textContent = project.title;
+    pdDesc.innerHTML = project.desc;
+    pdGlyph.textContent = project.glyph;
+    pdCode.href = project.code || '#';
+    pdView.href = project.view || '#';
+    if (pdStatus) {
+      pdStatus.hidden = project.status !== 'in-progress';
+    }
+    projectDetailOverlay.classList.add('open');
+  }
+
+  if (projectGrid) {
+    projectGrid.addEventListener('click', (e) => {
+      const card = e.target.closest('.project-card');
+      if (!card) return;
+      const project = projectData.find(p => p.theme === card.dataset.theme);
+      if (project) openProjectDetail(project);
+    });
+    projectGrid.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      const card = e.target.closest('.project-card');
+      if (!card) return;
+      e.preventDefault();
+      const project = projectData.find(p => p.theme === card.dataset.theme);
+      if (project) openProjectDetail(project);
+    });
+  }
+
   // 2. Modal Open/Close Logic
   document.querySelectorAll('.icon-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -137,7 +267,7 @@
     }
     animateRing();
 
-    const hoverTargets = 'a, button, .icon-btn, .social-icon, .close, .chat-msg, #chat-input, #chat-submit, #pre-ui-layer, .cert-card';
+    const hoverTargets = 'a, button, .icon-btn, .social-icon, .close, .chat-msg, #chat-input, #chat-submit, #pre-ui-layer, .cert-card, .project-card, .pd-btn';
     document.querySelectorAll(hoverTargets).forEach(el => {
       el.addEventListener('mouseenter', () => cursorRing.classList.add('hover'));
       el.addEventListener('mouseleave', () => cursorRing.classList.remove('hover'));
@@ -192,6 +322,8 @@
     setTimeout(() => splat.remove(), 750);
   }
 
+  const projectsOverlay = document.getElementById('overlay-projects');
+
   // 3b. Cursor-following hover label (speech-bubble style)
   const hoverLabel = document.createElement('div');
   hoverLabel.id = 'hover-label';
@@ -241,6 +373,26 @@
   });
 
 
+  // 3c. Cursor-reactive background glow
+  const bgGlow = document.getElementById('bg-glow');
+  if (bgGlow && window.matchMedia('(pointer: fine)').matches) {
+    let glowTargetX = 50, glowTargetY = 50;
+    let glowRafPending = false;
+
+    document.addEventListener('mousemove', (e) => {
+      glowTargetX = (e.clientX / window.innerWidth) * 100;
+      glowTargetY = (e.clientY / window.innerHeight) * 100;
+      if (!glowRafPending) {
+        glowRafPending = true;
+        requestAnimationFrame(() => {
+          bgGlow.style.setProperty('--mx', glowTargetX + '%');
+          bgGlow.style.setProperty('--my', glowTargetY + '%');
+          glowRafPending = false;
+        });
+      }
+    });
+  }
+
   // 4. Crow caw — plays an imported audio file
   const cawAudio = new Audio('crow/CawCaw.mp3');
   cawAudio.volume = 0.7;
@@ -251,6 +403,23 @@
       // Clone the node so rapid/overlapping triggers (hover + click) don't cut each other off
       const sound = cawAudio.cloneNode();
       sound.volume = cawAudio.volume;
+      sound.play().catch(() => {
+        // Autoplay can be blocked before the user has interacted with the page — fail silently
+      });
+    } catch (err) {
+      // Audio not available — fail silently
+    }
+  }
+
+  const wowAudio = new Audio('crow/wowow.mp3');
+  wowAudio.volume = 0.7;
+  wowAudio.preload = 'auto';
+
+  function playWow() {
+    try {
+      // Clone the node so rapid/overlapping triggers (hover + click) don't cut each other off
+      const sound = wowAudio.cloneNode();
+      sound.volume = wowAudio.volume;
       sound.play().catch(() => {
         // Autoplay can be blocked before the user has interacted with the page — fail silently
       });
@@ -353,13 +522,13 @@
 
   // 6. Easter Eggs: type a secret word to trigger something
   let keystrokeBuffer = '';
-  const secretWords = ['rise', 'halemaw'];
+  const secretWords = ['rise', 'halemaw', 'wally', 'spider'];
   const maxSecretLength = Math.max(...secretWords.map(w => w.length));
 
   // Popup element for the "halemaw" easter egg
   const halemawPopup = document.createElement('div');
   halemawPopup.id = 'halemaw-popup';
-  halemawPopup.innerHTML = '<img src="assets/Imaw.png" alt="Secret" class="halemaw-img" onerror="this.src=\'https://placehold.co/160x160/transparent/black?text=%3F%3F%3F\'" />';
+  halemawPopup.innerHTML = '<img src="assets/halmw.png" alt="Secret" class="halemaw-img" onerror="this.src=\'https://placehold.co/160x160/transparent/black?text=%3F%3F%3F\'" />';
   document.body.appendChild(halemawPopup);
   let halemawVisible = false;
 
@@ -367,7 +536,36 @@
     halemawVisible = !halemawVisible;
     halemawPopup.classList.toggle('halemaw-show', halemawVisible);
     halemawPopup.classList.toggle('halemaw-hide', !halemawVisible);
-    playCaw();
+    playWow();
+  }
+
+  // Popup element for the "wally" easter egg — peeks in from the side,
+  // like a game of hide-and-seek
+  const wallyPopup = document.createElement('div');
+  wallyPopup.id = 'wally-popup';
+  wallyPopup.innerHTML = '<img src="assets/Wally.png" alt="Secret" class="wally-img" onerror="this.src=\'https://placehold.co/160x220/transparent/black?text=Wally\'" />';
+  document.body.appendChild(wallyPopup);
+  let wallyVisible = false;
+
+  function triggerWally() {
+    wallyVisible = !wallyVisible;
+    wallyPopup.classList.toggle('wally-show', wallyVisible);
+    wallyPopup.classList.toggle('wally-hide', !wallyVisible);
+    playWow();
+  }
+
+  // Popup element for the "spider" easter egg — crawls up from below and
+  // settles over on the left, panning diagonally like it's climbing into frame
+  const spiderPopup = document.createElement('div');
+  spiderPopup.id = 'spider-popup';
+  spiderPopup.innerHTML = '<img src="assets/spidah.png" alt="Secret" class="spider-img" onerror="this.src=\'https://placehold.co/200x200/transparent/black?text=Spider\'" />';
+  document.body.appendChild(spiderPopup);
+  let spiderVisible = false;
+
+  function triggerSpider() {
+    spiderVisible = !spiderVisible;
+    spiderPopup.classList.toggle('spider-show', spiderVisible);
+    spiderPopup.classList.toggle('spider-hide', !spiderVisible);
   }
 
   document.addEventListener('keydown', (e) => {
@@ -385,6 +583,12 @@
         keystrokeBuffer = '';
       } else if (keystrokeBuffer.endsWith('halemaw')) {
         triggerHalemaw();
+        keystrokeBuffer = '';
+      } else if (keystrokeBuffer.endsWith('wally')) {
+        triggerWally();
+        keystrokeBuffer = '';
+      } else if (keystrokeBuffer.endsWith('spider')) {
+        triggerSpider();
         keystrokeBuffer = '';
       }
     }

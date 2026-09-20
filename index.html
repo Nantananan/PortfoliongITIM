@@ -28,7 +28,7 @@
   <a href="https://github.com/Nantananan" target="_blank" rel="noopener" aria-label="GitHub" class="social-icon">
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-1.04-.01-1.89-2.78.62-3.37-1.2-3.37-1.2-.45-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.63.07-.63 1 .07 1.53 1.05 1.53 1.05.9 1.57 2.35 1.12 2.93.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.73 0 0 .84-.28 2.75 1.05a9.3 9.3 0 0 1 2.5-.35c.85 0 1.7.12 2.5.35 1.9-1.33 2.74-1.05 2.74-1.05.56 1.42.21 2.47.1 2.73.65.72 1.03 1.63 1.03 2.75 0 3.93-2.34 4.79-4.57 5.05.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.6.69.49A10.26 10.26 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"/></svg>
   </a>
-  <a href="https://linkedin.com/in/renanclint" target="_blank" rel="noopener" aria-label="LinkedIn" class="social-icon">
+  <a href="https://www.linkedin.com/in/renan-clint-edis-437948328" target="_blank" rel="noopener" aria-label="LinkedIn" class="social-icon">
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.55 4.78 5.86V21h-4v-5.6c0-1.34-.02-3.06-1.87-3.06-1.87 0-2.16 1.45-2.16 2.96V21H9z"/></svg>
   </a>
 </div>
@@ -93,61 +93,91 @@
 
 <!-- ABOUT -->
 <div class="overlay" id="overlay-about">
-  <div class="modal">
+  <div class="modal about-modal">
     <button class="close" data-close> &#10005;</button>
-    <div class="modal-content">
+    <div class="modal-content about-content">
       <div class="spec-id mono">ABOUT ME</div>
 
-      <div class="about-header">
-        <img src="assets/profile.jpg" alt="Renan Clint Edis" class="about-photo" onerror="this.src='https://placehold.co/90x90/eeeeee/000000?text=RC'" />
-        <div>
-          <h2>Renan Clint Edis</h2>
+      <div class="about-hero">
+        <h2>Renan Clint Edis</h2>
+        <div class="about-meta">
           <div class="location-pin">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6.1-7-11a7 7 0 1 1 14 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
             <span>Pasay City</span>
           </div>
+          <a href="tel:+639565095151" class="location-pin contact-pin">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.4 21 3 13.6 3 4.5c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z"/></svg>
+            <span>+63 956 509 5151</span>
+          </a>
         </div>
+        <a href="assets/Renan_Clint_Edis_CV.pdf" download class="cv-download-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 20h16"/></svg>
+          Download the CV
+        </a>
       </div>
 
-      <p>Information Technology student with a proven track record of academic excellence. I am deeply passionate about creating engaging and intuitive digital experiences.</p>
-      <p>When I'm not shipping features, I'm usually sketching, prototyping interface ideas in a notebook, or hunting down the perfect shade of blue.</p>
-      
+      <div class="about-intro">
+        <div class="about-photo-wrap">
+          <img src="assets/profile.png" alt="Renan Clint Edis" class="about-photo-img about-photo-primary" onerror="this.src='https://placehold.co/300x360/eeeeee/000000?text=Renan'" />
+          <img src="assets/profilehover.png" alt="Renan Clint Edis" class="about-photo-img about-photo-alt" onerror="this.src='https://placehold.co/300x360/dddddd/000000?text=%3A%29'" />
+        </div>
+        <p>Information Technology student with a proven track record of academic excellence. I am deeply passionate about creating engaging and intuitive digital experiences.</p>
+        <p>When I'm not shipping features, I'm usually sketching, prototyping interface ideas in a notebook, or hunting down the perfect shade of blue.</p>
+      </div>
+
       <div class="about-subhead mono">SKILLS</div>
       <div class="skills-marquee">
         <div class="skills-track">
-          <span>JavaScript</span><span>React</span><span>TypeScript</span><span>Java</span><span>Figma</span><span>CSS/SCSS</span><span>SQL</span><span>Canva</span><span>Illustrations</span><span>Design</span>
-          <span>JavaScript</span><span>React</span><span>TypeScript</span><span>Java</span><span>Figma</span><span>CSS/SCSS</span><span>SQL</span><span>Canva</span><span>Illustrations</span><span>Design</span>
+          <span class="sk-1">JavaScript</span><span class="sk-2">React</span><span class="sk-3">TypeScript</span><span class="sk-4">Java</span><span class="sk-5">Figma</span><span class="sk-6">C++</span><span class="sk-1">CSS/SCSS</span><span class="sk-2">SQL</span><span class="sk-3">Canva</span><span class="sk-4">Illustrations</span><span class="sk-5">Design</span><span class="sk-6">C++</span>
+          <span class="sk-1">JavaScript</span><span class="sk-2">React</span><span class="sk-3">TypeScript</span><span class="sk-4">Java</span><span class="sk-5">Figma</span><span class="sk-6">C++</span><span class="sk-1">CSS/SCSS</span><span class="sk-2">SQL</span><span class="sk-3">Canva</span><span class="sk-4">Illustrations</span><span class="sk-5">Design</span><span class="sk-6">C++</span>
         </div>
       </div>
 
-      <div class="about-subhead mono">EDUCATION &amp; AFFILIATION</div>
-      <div class="edu-item">
-        <div class="t">Bachelor of Science in Information Technology - Philippine Christian University</div>
-        <div class="d"></div>
+      <div class="about-subhead mono">EDUCATION</div>
+      <div class="edu-list">
+        <div class="edu-item">
+          <div class="edu-body">
+            <div class="t">Bachelor of Science in Information Technology</div>
+            <div class="edu-org">Philippine Christian University</div>
+          </div>
+        </div>
+        <div class="edu-item">
+          <div class="edu-body">
+            <div class="t">Information Communications &amp; Technology</div>
+            <div class="edu-org">Philippine Christian University</div>
+          </div>
+        </div>
       </div>
-      <div class="edu-item">
-        <div class="t">Information Communications & Technology - Philippine Christian University</div>
-        <div class="d"></div>
-      </div>
-      <div class="edu-item">
-        <div class="t">JPCS 1st Year Representative</div>
-        <div class="d"> 
-          Peer Advocacy: Represent cohort concerns and ideas directly to leadership.
-          Event Support: Organize and promote year-specific activities and events.
-          Conflict Resolution: Help mediate and resolve student issues within the year.
-          Communication: Serve as the main informational link between students and the board.</div>
-      </div>
-      <div class="edu-item">
-        <div class="t">JPCS Interim Secretary</div>
-        <div class="d">
-          Reporting: Draft annual activity reports for presidential certification and submission to the JPCS National Board.
-          Records & History: Maintain permanent records of meetings, member rosters, and chapter history.
-          Correspondence & Notices: Handle official correspondence and issue formal meeting notices to officers.
-          Minutes Distribution: Record and email all meeting minutes directly to the Executive Committee.</div>
+
+      <div class="about-subhead mono">AFFILIATION</div>
+      <div class="edu-list">
+        <div class="edu-item">
+          <div class="edu-body">
+            <div class="t">JPCS 1st Year Representative</div>
+            <ul class="d">
+              <li>Peer Advocacy: Represent cohort concerns and ideas directly to leadership.</li>
+              <li>Event Support: Organize and promote year-specific activities and events.</li>
+              <li>Conflict Resolution: Help mediate and resolve student issues within the year.</li>
+              <li>Communication: Serve as the main informational link between students and the board.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="edu-item">
+          <div class="edu-body">
+            <div class="t">JPCS Interim Secretary</div>
+            <ul class="d">
+              <li>Reporting: Draft annual activity reports for presidential certification and submission to the JPCS National Board.</li>
+              <li>Records &amp; History: Maintain permanent records of meetings, member rosters, and chapter history.</li>
+              <li>Correspondence &amp; Notices: Handle official correspondence and issue formal meeting notices to officers.</li>
+              <li>Minutes Distribution: Record and email all meeting minutes directly to the Executive Committee.</li>
+            </ul>
+          </div>
+        </div>
       </div>
 
     </div>
   </div>
+
 </div>
 
 <!-- CERTIFICATIONS -->
@@ -162,7 +192,7 @@
 
         <div class="cert-card">
           <div class="cert-thumb-wrap" data-cert-view="Certs/1.jpg" tabindex="0" role="button" aria-label="View Python Fundamentals certificate" data-cert-title="Python Fundamentals">
-            <span class="cert-num">02</span>
+            <span class="cert-num">01</span>
             <img src="Certs/1.jpg" alt="" class="cert-thumb-img" onerror="this.style.display='none'" />
             <div class="cert-thumb-overlay">
               <span class="cert-author-sub">Certificate</span>
@@ -172,7 +202,7 @@
 
         <div class="cert-card">
           <div class="cert-thumb-wrap" data-cert-view="Certs/2.jpg" tabindex="0" role="button" aria-label="View Ethical Hacking certificate" data-cert-title="Ethical Hacking">
-            <span class="cert-num">03</span>
+            <span class="cert-num">02</span>
             <img src="Certs/2.jpg" alt="" class="cert-thumb-img" onerror="this.style.display='none'" />
             <div class="cert-thumb-overlay">
               <span class="cert-author-sub">Certificate</span>
@@ -182,7 +212,7 @@
 
         <div class="cert-card">
           <div class="cert-thumb-wrap" data-cert-view="Certs/3.jpg" tabindex="0" role="button" aria-label="View Figma for UI/UX certificate" data-cert-title="Canva For Design">
-            <span class="cert-num">04</span>
+            <span class="cert-num">03</span>
             <img src="Certs/3.jpg" alt="" class="cert-thumb-img" onerror="this.style.display='none'" />
             <div class="cert-thumb-overlay">
               <span class="cert-author-sub">Certificate</span>
@@ -192,7 +222,7 @@
 
         <div class="cert-card">
           <div class="cert-thumb-wrap" data-cert-view="Certs/4.jpg" tabindex="0" role="button" aria-label="View JAVA and C++ certificate" data-cert-title="Figma for UI/UX">
-            <span class="cert-num">05</span>
+            <span class="cert-num">04</span>
             <img src="Certs/4.jpg" alt="" class="cert-thumb-img" onerror="this.style.display='none'" />
             <div class="cert-thumb-overlay">
               <span class="cert-author-sub">Certificate</span>
@@ -202,7 +232,7 @@
 
         <div class="cert-card">
           <div class="cert-thumb-wrap" data-cert-view="Certs/5.jpg" tabindex="0" role="button" aria-label="View Web Design certificate" data-cert-title="Java &amp; C++">
-            <span class="cert-num">06</span>
+            <span class="cert-num">05</span>
             <img src="Certs/5.jpg" alt="" class="cert-thumb-img" onerror="this.style.display='none'" />
             <div class="cert-thumb-overlay">
               <span class="cert-author-sub">Certificate</span>
@@ -212,7 +242,7 @@
 
         <div class="cert-card">
           <div class="cert-thumb-wrap" data-cert-view="Certs/6.jpg" tabindex="0" role="button" aria-label="View JavaScript Fundamentals certificate" data-cert-title="Web Design">
-            <span class="cert-num">07</span>
+            <span class="cert-num">06</span>
             <img src="Certs/6.jpg" alt="" class="cert-thumb-img" onerror="this.style.display='none'" />
             <div class="cert-thumb-overlay">
               <span class="cert-author-sub">Certificate</span>
@@ -222,7 +252,7 @@
 
         <div class="cert-card">
           <div class="cert-thumb-wrap" data-cert-view="Certs/7.jpg" tabindex="0" role="button" aria-label="View Python Fundamentals certificate" data-cert-title="JavaScript Fundamentals">
-            <span class="cert-num">08</span>
+            <span class="cert-num">07</span>
             <img src="Certs/7.jpg" alt="" class="cert-thumb-img" onerror="this.style.display='none'" />
             <div class="cert-thumb-overlay">
               <span class="cert-author-sub">Certificate</span>
@@ -232,7 +262,7 @@
 
         <div class="cert-card">
           <div class="cert-thumb-wrap" data-cert-view="Certs/9.jpg" tabindex="0" role="button" aria-label="View Certipikit certificate" data-cert-title="This is Animation">
-            <span class="cert-num">09</span>
+            <span class="cert-num">08</span>
             <img src="Certs/9.jpg" alt="" class="cert-thumb-img" onerror="this.style.display='none'" />
             <div class="cert-thumb-overlay">
               <span class="cert-author-sub">Certificate</span>
@@ -242,7 +272,7 @@
 
         <div class="cert-card">
           <div class="cert-thumb-wrap" data-cert-view="Certs/8.jpg" tabindex="0" role="button" aria-label="View Certipikit certificate" data-cert-title="JPCS">
-            <span class="cert-num">10</span>
+            <span class="cert-num">09</span>
             <img src="Certs/8.jpg" alt="" class="cert-thumb-img" onerror="this.style.display='none'" />
             <div class="cert-thumb-overlay">
               <span class="cert-author-sub">Certificate</span>
@@ -252,7 +282,7 @@
 
         <div class="cert-card">
           <div class="cert-thumb-wrap" data-cert-view="Certs/10.jpg" tabindex="0" role="button" aria-label="View Certipikit certificate" data-cert-title="Certipikit">
-            <span class="cert-num">11</span>
+            <span class="cert-num">10</span>
             <img src="Certs/10.jpg" alt="" class="cert-thumb-img" onerror="this.style.display='none'" />
             <div class="cert-thumb-overlay">
               <span class="cert-author-sub">Certificate</span>
@@ -281,12 +311,38 @@
 <!-- PROJECTS -->
 <div class="overlay" id="overlay-projects">
   <div class="modal">
-    <button class="close" data-close>CLOSE &#10005;</button>
+    <button class="close" data-close> &#10005;</button>
     <div class="modal-content">
       <div class="spec-id mono">PROJECTS</div>
       <h2>Ideas, built</h2>
 
+      <div class="project-grid" id="project-grid">
+        <!-- Cards are rendered here by script.js from the projectData list -->
+      </div>
 
+    </div>
+  </div>
+</div>
+
+<!-- PROJECT DETAIL (single reusable modal, re-themed per project) -->
+<div class="overlay" id="overlay-project-detail">
+  <div class="modal project-detail-modal" id="project-detail-modal">
+    <button class="close" data-close>&#10005;</button>
+    <div class="modal-content">
+      <div class="pd-glyph" id="pd-glyph" aria-hidden="true"></div>
+      <div class="spec-id mono" id="pd-tag">TAG</div>
+      <h2 id="pd-title">Title</h2>
+      <p id="pd-desc">Description.</p>
+      <div class="pd-actions">
+        <a id="pd-code" class="pd-btn pd-btn-code" href="#" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 5 2 12l6 7M16 5l6 7-6 7"/></svg>
+          Code
+        </a>
+        <a id="pd-view" class="pd-btn pd-btn-view" href="#" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+          View
+        </a>
+      </div>
     </div>
   </div>
 </div>
@@ -294,7 +350,7 @@
 <!-- CONTACT / INK CROW CHAT -->
 <div class="overlay" id="overlay-contact">
   <div class="modal">
-    <button class="close" data-close>CLOSE &#10005;</button>
+    <button class="close" data-close> &#10005;</button>
     <div class="modal-content">
       <div class="spec-id mono">CONTACT / ASK THE CROW</div>
       <h2>Ask the Ink Crow</h2>
