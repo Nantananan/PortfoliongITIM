@@ -80,7 +80,49 @@
       <div class="name-outline-placeholder">
         <img src="assets/CLINT.png" alt="name" class="ink-img" onerror="this.src='https://placehold.co/350x150/transparent/black?text=CLINT'" />
       </div>
+
+      <!--
+        GALLERY ICON — placeholder outline, positioned above and to the
+        right of the crow (#btn-bird). Not wired up yet: no data-modal
+        target or #overlay-gallery exists. Once artwork is ready, drop the
+        real ink-art <img> into #btn-gallery-anim .icon-slot, swap the
+        placeholder box below for it, and give this icon-btn a
+        data-modal="gallery" + data-hover-label like the others.
+
+      <div class="icon-btn" id="btn-gallery" data-modal="gallery" data-hover-label="VIEW GALLERY &raquo;">
+        <div class="gallery-outline-placeholder">
+          <span>[ GALLERY ]</span>
+        </div>
+      </div>
+      -->
     </div>
+
+    <!--
+      Suggested CSS to go with the block above (in style.css):
+
+      #btn-gallery {
+        width: 140px;
+        height: 140px;
+        top: -190px;
+        left: 105%;
+      }
+
+      .gallery-outline-placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        border: 2px dashed var(--gray);
+        border-radius: 8px;
+        color: var(--gray);
+        font-family: 'Courier New', monospace;
+        font-size: 0.75rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        text-align: center;
+      }
+    -->
 
   </div>
 </div>
@@ -118,7 +160,7 @@
 
       <div class="about-intro">
         <div class="about-photo-wrap">
-          <img src="assets/Profile.png" alt="Renan Clint Edis" class="about-photo-img about-photo-primary" onerror="this.src='https://placehold.co/300x360/eeeeee/000000?text=Renan'" />
+          <img src="assets/profile.png" alt="Renan Clint Edis" class="about-photo-img about-photo-primary" onerror="this.src='https://placehold.co/300x360/eeeeee/000000?text=Renan'" />
           <img src="assets/profilehover.png" alt="Renan Clint Edis" class="about-photo-img about-photo-alt" onerror="this.src='https://placehold.co/300x360/dddddd/000000?text=%3A%29'" />
         </div>
         <p>Information Technology student with a proven track record of academic excellence. I am deeply passionate about creating engaging and intuitive digital experiences.</p>
@@ -192,7 +234,7 @@
 
         <div class="cert-card">
           <div class="cert-thumb-wrap" data-cert-view="Certs/1.jpg" tabindex="0" role="button" aria-label="View Python Fundamentals certificate" data-cert-title="Python Fundamentals">
-            <span class="cert-num">01</span>
+            <span class="cert-num">02</span>
             <img src="Certs/1.jpg" alt="" class="cert-thumb-img" onerror="this.style.display='none'" />
             <div class="cert-thumb-overlay">
               <span class="cert-author-sub">Certificate</span>
@@ -202,7 +244,7 @@
 
         <div class="cert-card">
           <div class="cert-thumb-wrap" data-cert-view="Certs/2.jpg" tabindex="0" role="button" aria-label="View Ethical Hacking certificate" data-cert-title="Ethical Hacking">
-            <span class="cert-num">02</span>
+            <span class="cert-num">03</span>
             <img src="Certs/2.jpg" alt="" class="cert-thumb-img" onerror="this.style.display='none'" />
             <div class="cert-thumb-overlay">
               <span class="cert-author-sub">Certificate</span>
@@ -212,7 +254,7 @@
 
         <div class="cert-card">
           <div class="cert-thumb-wrap" data-cert-view="Certs/3.jpg" tabindex="0" role="button" aria-label="View Figma for UI/UX certificate" data-cert-title="Canva For Design">
-            <span class="cert-num">03</span>
+            <span class="cert-num">04</span>
             <img src="Certs/3.jpg" alt="" class="cert-thumb-img" onerror="this.style.display='none'" />
             <div class="cert-thumb-overlay">
               <span class="cert-author-sub">Certificate</span>
@@ -222,7 +264,7 @@
 
         <div class="cert-card">
           <div class="cert-thumb-wrap" data-cert-view="Certs/4.jpg" tabindex="0" role="button" aria-label="View JAVA and C++ certificate" data-cert-title="Figma for UI/UX">
-            <span class="cert-num">04</span>
+            <span class="cert-num">05</span>
             <img src="Certs/4.jpg" alt="" class="cert-thumb-img" onerror="this.style.display='none'" />
             <div class="cert-thumb-overlay">
               <span class="cert-author-sub">Certificate</span>
@@ -232,7 +274,7 @@
 
         <div class="cert-card">
           <div class="cert-thumb-wrap" data-cert-view="Certs/5.jpg" tabindex="0" role="button" aria-label="View Web Design certificate" data-cert-title="Java &amp; C++">
-            <span class="cert-num">05</span>
+            <span class="cert-num">06</span>
             <img src="Certs/5.jpg" alt="" class="cert-thumb-img" onerror="this.style.display='none'" />
             <div class="cert-thumb-overlay">
               <span class="cert-author-sub">Certificate</span>
@@ -242,7 +284,7 @@
 
         <div class="cert-card">
           <div class="cert-thumb-wrap" data-cert-view="Certs/6.jpg" tabindex="0" role="button" aria-label="View JavaScript Fundamentals certificate" data-cert-title="Web Design">
-            <span class="cert-num">06</span>
+            <span class="cert-num">07</span>
             <img src="Certs/6.jpg" alt="" class="cert-thumb-img" onerror="this.style.display='none'" />
             <div class="cert-thumb-overlay">
               <span class="cert-author-sub">Certificate</span>
@@ -252,7 +294,7 @@
 
         <div class="cert-card">
           <div class="cert-thumb-wrap" data-cert-view="Certs/7.jpg" tabindex="0" role="button" aria-label="View Python Fundamentals certificate" data-cert-title="JavaScript Fundamentals">
-            <span class="cert-num">07</span>
+            <span class="cert-num">08</span>
             <img src="Certs/7.jpg" alt="" class="cert-thumb-img" onerror="this.style.display='none'" />
             <div class="cert-thumb-overlay">
               <span class="cert-author-sub">Certificate</span>
@@ -262,7 +304,7 @@
 
         <div class="cert-card">
           <div class="cert-thumb-wrap" data-cert-view="Certs/9.jpg" tabindex="0" role="button" aria-label="View Certipikit certificate" data-cert-title="This is Animation">
-            <span class="cert-num">08</span>
+            <span class="cert-num">09</span>
             <img src="Certs/9.jpg" alt="" class="cert-thumb-img" onerror="this.style.display='none'" />
             <div class="cert-thumb-overlay">
               <span class="cert-author-sub">Certificate</span>
@@ -272,7 +314,7 @@
 
         <div class="cert-card">
           <div class="cert-thumb-wrap" data-cert-view="Certs/8.jpg" tabindex="0" role="button" aria-label="View Certipikit certificate" data-cert-title="JPCS">
-            <span class="cert-num">09</span>
+            <span class="cert-num">10</span>
             <img src="Certs/8.jpg" alt="" class="cert-thumb-img" onerror="this.style.display='none'" />
             <div class="cert-thumb-overlay">
               <span class="cert-author-sub">Certificate</span>
@@ -282,7 +324,7 @@
 
         <div class="cert-card">
           <div class="cert-thumb-wrap" data-cert-view="Certs/10.jpg" tabindex="0" role="button" aria-label="View Certipikit certificate" data-cert-title="Certipikit">
-            <span class="cert-num">10</span>
+            <span class="cert-num">11</span>
             <img src="Certs/10.jpg" alt="" class="cert-thumb-img" onerror="this.style.display='none'" />
             <div class="cert-thumb-overlay">
               <span class="cert-author-sub">Certificate</span>
@@ -331,6 +373,7 @@
     <div class="modal-content">
       <div class="pd-glyph" id="pd-glyph" aria-hidden="true"></div>
       <div class="spec-id mono" id="pd-tag">TAG</div>
+      <span class="pd-status-badge mono" id="pd-status" hidden>IN PROGRESS</span>
       <h2 id="pd-title">Title</h2>
       <p id="pd-desc">Description.</p>
       <div class="pd-actions">

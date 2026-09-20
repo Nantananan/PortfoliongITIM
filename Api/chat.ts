@@ -26,12 +26,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader('Cache-Control', 'no-store');
 
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed. Use POST.' });
+    return res.status(405).json({ error: 'Chat API is deployed. Use POST for messages.' });
   }
 
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({ error: 'GEMINI_API_KEY is not configured in Vercel.' });
+    return res.status(500).json({ code: 'MISSING_GEMINI_API_KEY', error: 'GEMINI_API_KEY is not configured for this Vercel deployment.' });
   }
 
   const body = req.body || {};
@@ -68,17 +68,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     };
 
     if (!upstream.ok) {
-      return res.status(upstream.status).json({ error: data.error?.message || 'Gemini request failed.' });
+      return res.status(upstream.status).json({ code: 'GEMINI_REQUEST_FAILED', error: data.error?.message || 'Gemini request failed.' });
     }
 
     const answer = data.candidates?.[0]?.content?.parts?.[0]?.text;
     if (!answer) {
-      return res.status(502).json({ error: 'Gemini returned an empty response.' });
+      return res.status(502).json({ code: 'EMPTY_GEMINI_RESPONSE', error: 'Gemini returned an empty response.' });
     }
 
     return res.status(200).json({ answer });
   } catch (error) {
     console.error('Gemini proxy error:', error);
-    return res.status(502).json({ error: 'Unable to reach Gemini right now.' });
+    return res.status(502).json({ code: 'GEMINI_NETWORK_ERROR', error: 'Unable to reach Gemini right now.' });
   }
 }
