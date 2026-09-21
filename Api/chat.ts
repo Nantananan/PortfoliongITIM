@@ -19,7 +19,7 @@ type VercelResponse = {
   setHeader: (name: string, value: string) => VercelResponse;
 };
 
-const MODEL = 'gemini-flash-latest';
+const MODEL = 'gemini-3.6-flash';
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
