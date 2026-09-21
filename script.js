@@ -507,3 +507,96 @@
       }
     }
   });
+
+
+  // 7. Crow chatbot — chat logic for #overlay-crow
+  // Replies are scripted below. To hook up a real AI backend later, replace
+  // getCrowReply() with an async fetch() to your own server endpoint.
+  (function initCrowChat() {
+    const overlay = document.getElementById('overlay-crow');
+    const messages = document.getElementById('crow-messages');
+    const input = document.getElementById('crow-input');
+    const sendBtn = document.getElementById('crow-send');
+    const chips = document.getElementById('crow-suggestions');
+    if (!overlay || !messages || !input || !sendBtn) return;
+
+    const replies = [
+      { keys: ['project', 'built', 'portfolio'],
+        text: 'Renan has built Slotty (a slot-machine game), a scroll-driven Little Prince retelling, and more. Click the lantern on the main page to see them all. Caw!' },
+      { keys: ['skill', 'tech', 'stack', 'language'],
+        text: 'JavaScript, React, TypeScript, Java, C++, SQL, Figma, Canva and illustration. Design and code, both in ink.' },
+      { keys: ['contact', 'email', 'reach', 'hire', 'phone', 'call'],
+        text: 'Email: renanclint@gmail.com. He is also on GitHub and LinkedIn (links in the corner of the page).' },
+      { keys: ['cert', 'credential', 'course'],
+        text: 'Python, Ethical Hacking, Figma, Canva, Java & C++, Web Design, JavaScript and more. Tap the mushroom to view them.' },
+      { keys: ['cv', 'resume'],
+        text: 'You can download his CV from the About Me section (tap the sun).' },
+      { keys: ['who', 'about', 'renan', 'student'],
+        text: 'Renan Clint Edis is an IT student from Pasay City who loves crafting intuitive, engaging digital experiences. Tap the sun for his full story.' },
+      { keys: ['hello', 'hi', 'hey', 'caw'],
+        text: 'Caw caw! Ask me about Renan\u2019s projects, skills, certificates or how to reach him.' }
+    ];
+    const fallbacks = [
+      'Hmm, the ink has not dried on that one. Try asking about projects, skills, certificates or contact.',
+      'Caw? I only know about Renan and his work. Ask me about those!'
+    ];
+
+    function getCrowReply(text) {
+      const q = text.toLowerCase();
+      const hit = replies.find(r => r.keys.some(k => q.includes(k)));
+      return hit ? hit.text : fallbacks[Math.floor(Math.random() * fallbacks.length)];
+    }
+
+    function addMessage(text, who) {
+      const el = document.createElement('div');
+      el.className = 'crow-msg ' + who;
+      el.textContent = text; // textContent, never innerHTML, so user input can't inject markup
+      messages.appendChild(el);
+      messages.scrollTop = messages.scrollHeight;
+      return el;
+    }
+
+    let busy = false;
+    function send(text) {
+      text = text.trim();
+      if (!text || busy) return;
+      busy = true;
+      addMessage(text, 'user');
+      input.value = '';
+      if (chips) chips.classList.add('hidden');
+
+      const typing = document.createElement('div');
+      typing.className = 'crow-msg bot typing';
+      typing.innerHTML = '<span></span><span></span><span></span>';
+      messages.appendChild(typing);
+      messages.scrollTop = messages.scrollHeight;
+
+      setTimeout(() => {
+        typing.remove();
+        addMessage(getCrowReply(text), 'bot');
+        busy = false;
+        input.focus();
+      }, 600 + Math.random() * 500);
+    }
+
+    sendBtn.addEventListener('click', () => send(input.value));
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); send(input.value); }
+    });
+    if (chips) {
+      chips.querySelectorAll('.crow-chip').forEach(chip => {
+        chip.addEventListener('click', () => send(chip.dataset.q));
+      });
+    }
+
+    // Greeting + autofocus the first time the modal opens
+    let greeted = false;
+    new MutationObserver(() => {
+      if (!overlay.classList.contains('open')) return;
+      if (!greeted) {
+        greeted = true;
+        addMessage('Caw! I am the Ink Crow. What would you like to know about Renan?', 'bot');
+      }
+      setTimeout(() => input.focus(), 350);
+    }).observe(overlay, { attributes: true, attributeFilter: ['class'] });
+  })();

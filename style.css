@@ -1404,3 +1404,84 @@
   .project-grid { grid-template-columns: 1fr; }
   .project-detail-modal .pd-glyph { font-size: 5rem; }
 }
+
+  /* ============ CROW CHATBOT — right-side modal ============ */
+  .overlay.overlay-right {
+    justify-content: flex-end;
+    align-items: stretch;
+    background: rgba(255, 255, 255, 0.55);
+    padding: 24px;
+  }
+  .crow-modal {
+    width: min(420px, 100%);
+    max-height: none;
+    height: 100%;
+    padding: 28px 24px 20px;
+    transform: translateX(60px);
+    opacity: 0;
+  }
+  .overlay.open .crow-modal { transform: translateX(0); opacity: 1; }
+
+  .crow-header { padding-right: 32px; margin-bottom: 12px; }
+  .crow-header .spec-id { margin-bottom: 6px; }
+  .modal .crow-sub { font-size: 0.95rem; color: var(--gray); margin-bottom: 0; line-height: 1.4; }
+
+  .crow-messages {
+    flex: 1; overflow-y: auto; display: flex; flex-direction: column;
+    gap: 12px; padding: 16px 6px 8px 0; border-top: 1px solid var(--gray-light);
+    scroll-behavior: smooth;
+  }
+  .crow-messages::-webkit-scrollbar { width: 5px; }
+  .crow-messages::-webkit-scrollbar-thumb { background: var(--gray); border-radius: 3px; }
+
+  .crow-msg {
+    max-width: 85%; padding: 10px 14px; font-size: 1rem; line-height: 1.45;
+    border: 1.5px solid var(--line); word-wrap: break-word;
+    animation: crowMsgIn 0.3s ease both;
+  }
+  .crow-msg.bot  { align-self: flex-start; background: var(--bg); border-radius: 14px 14px 14px 2px; }
+  .crow-msg.user { align-self: flex-end; background: var(--line); color: var(--bg); border-radius: 14px 14px 2px 14px; }
+
+  .crow-msg.typing { display: flex; gap: 4px; padding: 14px; }
+  .crow-msg.typing span {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--gray);
+    animation: crowDot 1s infinite ease-in-out;
+  }
+  .crow-msg.typing span:nth-child(2) { animation-delay: 0.15s; }
+  .crow-msg.typing span:nth-child(3) { animation-delay: 0.3s; }
+
+  @keyframes crowMsgIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  @keyframes crowDot { 0%, 80%, 100% { opacity: 0.3; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-3px); } }
+
+  .crow-suggestions { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 0; }
+  .crow-suggestions.hidden { display: none; }
+  .crow-chip {
+    font-family: 'Courier New', monospace; font-size: 0.8rem; letter-spacing: 0.06em;
+    padding: 6px 12px; background: none; border: 1.5px solid var(--gray); color: var(--gray);
+    border-radius: 999px; transition: all 0.25s ease;
+  }
+  .crow-chip:hover { border-color: var(--line); color: var(--bg); background: var(--line); }
+
+  .crow-input-row { display: flex; gap: 8px; border-top: 1px solid var(--gray-light); padding-top: 14px; }
+  .crow-input {
+    flex: 1; min-width: 0; font-size: 1rem; padding: 10px 14px; font-family: inherit;
+    border: 1.5px solid var(--line); background: var(--bg); color: var(--line); outline: none;
+    border-radius: 999px;
+  }
+  .crow-input:focus { box-shadow: 0 0 0 3px var(--gray-light); }
+  .crow-send {
+    width: 44px; height: 44px; flex-shrink: 0; display: grid; place-items: center;
+    background: var(--line); color: var(--bg); border: none; border-radius: 50%;
+    transition: transform 0.2s ease;
+  }
+  .crow-send:hover { transform: scale(1.08); }
+  .crow-send svg { width: 20px; height: 20px; }
+
+  @media (pointer: fine) {
+    .crow-input, .crow-send, .crow-chip { cursor: none; }
+  }
+
+  @media (max-width: 600px) {
+    .overlay.overlay-right { padding: 0; }
+    .crow-modal { width: 100%; border-width: 0; padding: 24px 16px 16px; }
+  }

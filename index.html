@@ -72,7 +72,7 @@
 
     <!-- Right Side -->
     <div class="outline-group" id="group-right">
-      <div class="icon-btn grounded-icon" id="btn-bird">
+      <div class="icon-btn grounded-icon" id="btn-bird" data-modal="crow" data-hover-label="ASK THE CROW &raquo;">
         <div class="icon-slot">
           <img src="assets/Crow.png" alt="Crow" class="ink-img" onerror="this.src='https://placehold.co/160x140/transparent/black?text=Crow'" />
         </div>
@@ -390,6 +390,29 @@
   </div>
 </div>
 
+
+<!-- CROW CHATBOT (slides in from the right) -->
+<div class="overlay overlay-right" id="overlay-crow">
+  <div class="modal crow-modal" role="dialog" aria-modal="true" aria-labelledby="crow-title">
+    <button class="close" data-close aria-label="Close chat">&#10005;</button>
+    <div class="crow-header">
+      <div class="spec-id mono" id="crow-title">ASK THE CROW</div>
+      <p class="crow-sub">A wise old bird who knows Renan's work. Ask away.</p>
+    </div>
+    <div class="crow-messages" id="crow-messages" aria-live="polite"></div>
+    <div class="crow-suggestions" id="crow-suggestions">
+      <button type="button" class="crow-chip" data-q="What projects has Renan built?">Projects</button>
+      <button type="button" class="crow-chip" data-q="What are his skills?">Skills</button>
+      <button type="button" class="crow-chip" data-q="How can I contact him?">Contact</button>
+    </div>
+    <div class="crow-input-row">
+      <input type="text" id="crow-input" class="crow-input" placeholder="Caw something..." autocomplete="off" aria-label="Message the crow" />
+      <button type="button" id="crow-send" class="crow-send" aria-label="Send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
 
 <script src="script.js"></script>
 </body>
