@@ -478,7 +478,7 @@
 
   /* Inline hyperlink inside blurbs/descriptions — underline draws in on hover */
   .inline-link {
-    color: #f39e3c;
+    color: #3594d3;
     text-decoration: none;
     background-image: linear-gradient(currentColor, currentColor);
     background-size: 0% 1px;
@@ -1338,8 +1338,8 @@
 
 /* Woord — forest green, typographic / word-focused */
 .project-card[data-theme="woord"] {
-  --accent: #2f6b4f;
-  --card-bg: #f2f6f1;
+  --accent: #6620a0;
+  --card-bg: #f2e5ff;
 }
 
 /* KuyaWell — calm clinical teal, matches WellPath's care theme */

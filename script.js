@@ -82,7 +82,7 @@
       glyph: '\u{1F30C}',
       tag: 'STORYTELLING · WEB',
       title: 'Little Prince',
-      blurb: 'A quiet, illustrated web retelling of The Little Prince  scroll-driven scenes under a night sky. illustrated all by <a href="https://erika-dc.github.io/Erika_Portfolio/#contact" target="_blank" rel="noopener" class="inline-link">Huerika</a> ',
+      blurb: 'An immersive, scroll-driven web experience reimagining The Little Prince under the stars, featuring delicate illustrations by <a href="https://erika-dc.github.io/Erika_Portfolio/#contact" target="_blank" rel="noopener" class="inline-link">Erika Abigail "Malupet" Cuarteron De Castro</a> ',
       desc: 'A scroll-driven interactive retelling inspired by The Little Prince, built around soft illustration, gentle parallax, and pacing that mirrors the book\u2019s reflective tone. The night-sky palette and starlit motion carry the mood scene to scene.',
       code: 'https://github.com/Nantananan/SKIES',
       view: 'https://nantananan.github.io/SKIES/'
@@ -105,7 +105,7 @@
       glyph: '\u{1F4D6}',
       tag: 'WORD GAME · LOGIC',
       title: 'Woord',
-      blurb: 'A minimalist word-guessing game with clean typography and a Crucible to discover new words. Collaborative Work with <a href="https://cozyportfolio.vercel.app" target="_blank" rel="noopener" class="inline-link">Tyrone Olbes</a>, <a href="https://cozyportfolio.vercel.app" target="_blank" rel="noopener" class="inline-link">Josh Velasco</a>, and <a href="https://rzantua022.github.io/My-Portfolio/#top" target="_blank" rel="noopener" class="inline-link">Ranel Zantua</a> ',
+      blurb: 'A minimalist word-guessing game with clean typography and a Crucible to discover new words. Collaborative Work with <a href="https://cozyportfolio.vercel.app" target="_blank" rel="noopener" class="inline-link">Tyrone Olbes</a>, <a href="https://drimport-ruddy.vercel.app/#services" target="_blank" rel="noopener" class="inline-link">Josh Velasco</a>, and <a href="https://rzantua022.github.io/My-Portfolio/#top" target="_blank" rel="noopener" class="inline-link">Ranel Zantua</a> ',
       desc: 'Woord is a minimalist word-guessing game focused on clean typographic feedback and a Witch themed interface. The emphasis is on fast round-trip logic and a distraction-free board.',
       status: 'in-progress',
       code: '#',
