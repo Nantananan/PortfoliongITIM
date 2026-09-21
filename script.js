@@ -267,7 +267,7 @@
     }
     animateRing();
 
-    const hoverTargets = 'a, button, .icon-btn, .social-icon, .close, .chat-msg, #chat-input, #chat-submit, #pre-ui-layer, .cert-card, .project-card, .pd-btn';
+    const hoverTargets = 'a, button, .icon-btn, .social-icon, .close, #pre-ui-layer, .cert-card, .project-card, .pd-btn';
     document.querySelectorAll(hoverTargets).forEach(el => {
       el.addEventListener('mouseenter', () => cursorRing.classList.add('hover'));
       el.addEventListener('mouseleave', () => cursorRing.classList.remove('hover'));
@@ -432,92 +432,6 @@
   if (crowBtn) {
     crowBtn.addEventListener('click', playCaw);
     crowBtn.addEventListener('mouseenter', playCaw);
-  }
-
-  // 5. Ink Crow Chatbot Integration
-  const chatRoot = document.getElementById('ink-crow-chat');
-  const chatSend = document.querySelector('[data-chat-send]');
-  const chatInput = document.querySelector('[data-chat-input]');
-  const chatHistory = document.querySelector('[data-chat-history]');
-
-  const chatKnowledge = "Renan Clint is an Information Technology student in Pasay City. Renan is the Secretary of the Junior Philippine Computer Society and a Dean's Lister. Renan is building WellPath, an AI-powered wellness monitoring and chronic disease risk prediction capstone project. Other projects include an Interactive Lesson Reviewer and a Pixel-World Portfolio. Visitors can reach Renan through the social links on this page.";
-  let conversation = [];
-  let isWaiting = false;
-
-  if (chatRoot && chatSend && chatInput && chatHistory) {
-    const addMessage = (role, text) => {
-      const message = document.createElement('div');
-      message.className = `chat-msg ${role === 'assistant' ? 'ai-msg' : 'user-msg'}`;
-      message.textContent = text;
-      chatHistory.appendChild(message);
-      chatHistory.scrollTop = chatHistory.scrollHeight;
-    };
-    addMessage('assistant', 'Caw. I am the Ink Crow. Ask me about Renan, his work, or the ideas in this portfolio.');
-
-    // Fallback response for missing API
-    const localReply = (question) => {
-      const query = question.toLowerCase();
-      if (/hello|hi|hey|caw/.test(query)) return 'Caw, visitor. The ink is listening. What would you like to know?';
-      if (/skill|tech|study|school|about|who/.test(query)) return "Renan is an IT student, JPCS Secretary, and Dean's Lister. Ask me about a project for more detail.";
-      if (/project|work|build|wellpath/.test(query)) return "WellPath is Renan's AI wellness monitoring and chronic disease risk prediction capstone project.";
-      return 'I cannot answer that right now. Try asking about Renan, WellPath, projects, skills, or contact details.';
-    };
-
-    const handleChatSubmit = async () => {
-      const question = chatInput.value.trim();
-      if (!question || isWaiting) return;
-      
-      addMessage('user', question);
-      chatInput.value = '';
-      isWaiting = true;
-      
-      const thinking = document.createElement('div');
-      thinking.className = 'chat-msg ai-msg';
-      thinking.textContent = '*ruffles feathers thinking...*';
-      chatHistory.appendChild(thinking);
-
-      try {
-        const apiKey = ""; // Add Gemini API key if required for testing standalone
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-        
-        conversation.push({ role: "user", parts: [{ text: question }] });
-
-        const payload = {
-          contents: conversation,
-          systemInstruction: {
-            parts: [{ text: `You are the Ink Crow. Be concise, warm, mysterious, and helpful. Use this knowledge: ${chatKnowledge}` }]
-          },
-        };
-
-        const response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-
-        const result = await response.json();
-        const candidate = result.candidates?.[0];
-        
-        thinking.remove();
-
-        if (candidate && candidate.content?.parts?.[0]?.text) {
-          const aiText = candidate.content.parts[0].text;
-          addMessage('assistant', aiText);
-          conversation.push(candidate.content);
-          playCaw();
-        } else {
-          throw new Error("Invalid response");
-        }
-      } catch (error) {
-        thinking.remove();
-        addMessage('assistant', `${localReply(question)} (API unavailable)`);
-      }
-
-      isWaiting = false;
-    };
-    
-    chatSend.addEventListener('click', handleChatSubmit);
-    chatInput.addEventListener('keydown', event => { if (event.key === 'Enter') handleChatSubmit(); });
   }
 
   // 6. Easter Eggs: type a secret word to trigger something

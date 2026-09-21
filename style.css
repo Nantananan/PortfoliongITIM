@@ -692,21 +692,6 @@
   .proj .d { font-size: 1.1rem; color: var(--gray); line-height: 1.4; }
   .skill-row { display: flex; justify-content: space-between; font-family: 'Courier New', monospace; font-size: 1.1rem; }
 
-  .chat-container {
-    margin-top: 30px; border: 1px solid var(--line);
-    display: flex; flex-direction: column; height: 250px;
-  }
-  .chat-history {
-    flex: 1; overflow-y: auto; padding: 15px;
-    background: var(--gray-light); display: flex; flex-direction: column; gap: 10px;
-  }
-  .chat-msg { padding: 10px; max-width: 85%; font-family: 'Courier New', monospace; font-size: 0.95rem; line-height: 1.4; }
-  .ai-msg { background: var(--bg); border: 1px solid var(--gray); align-self: flex-start; }
-  .user-msg { background: var(--line); color: var(--bg); align-self: flex-end; }
-  .chat-input-area { display: flex; border-top: 1px solid var(--line); }
-  #chat-input { flex: 1; padding: 10px; border: none; font-family: 'Courier New', monospace; outline: none; }
-  #chat-submit { padding: 0 20px; background: var(--line); color: var(--bg); border: none; cursor: pointer; font-family: 'Courier New', monospace; text-transform: uppercase; }
-  #chat-submit:hover { background: var(--gray); }
 
   .social-links {
     position: fixed; bottom: 30px; right: 30px;
@@ -945,7 +930,6 @@
     .legend { font-size: 0.75rem; top: 15px; left: 15px; }
     .modal { padding: 48px 20px 20px; max-height: 90vh; }
     .modal h2 { font-size: 2rem; }
-    .chat-container { height: 220px; }
   }
   /* Easter Egg: "Halemaw" — pans up from below and holds; typing it again sends it back down */
   #halemaw-popup 
