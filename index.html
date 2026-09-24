@@ -76,54 +76,40 @@
         <div class="icon-slot">
           <img src="assets/Crow.png" alt="Crow" class="ink-img" onerror="this.src='https://placehold.co/160x140/transparent/black?text=Crow'" />
         </div>
+        <!--
+          Falling-feather hover effect. Four feather images loop with
+          staggered timing/drift while #btn-bird is hovered. Point each
+          src at your own feather art (assets/feather-1.png, etc).
+        -->
+        <div class="feather-field" aria-hidden="true">
+          <img src="assets/feather1.png" class="feather feather-1" alt="" onerror="this.style.display='none'" />
+          <img src="assets/feather2.png" class="feather feather-2" alt="" onerror="this.style.display='none'" />
+          <img src="assets/feather3.png" class="feather feather-3" alt="" onerror="this.style.display='none'" />
+          <img src="assets/feather4.png" class="feather feather-4" alt="" onerror="this.style.display='none'" />
+        </div>
       </div>
       <div class="name-outline-placeholder">
         <img src="assets/CLINT.png" alt="name" class="ink-img" onerror="this.src='https://placehold.co/350x150/transparent/black?text=CLINT'" />
       </div>
 
       <!--
-        GALLERY ICON — placeholder outline, positioned above and to the
-        right of the crow (#btn-bird). Not wired up yet: no data-modal
-        target or #overlay-gallery exists. Once artwork is ready, drop the
-        real ink-art <img> into #btn-gallery-anim .icon-slot, swap the
-        placeholder box below for it, and give this icon-btn a
-        data-modal="gallery" + data-hover-label like the others.
+        GALLERY ICON — an "eye" that opens on hover.
+        Not wired up yet as a modal: no data-modal target or
+        #overlay-gallery exists, so clicking it currently does nothing
+        (safe no-op). Add data-modal="gallery" + an #overlay-gallery
+        once that content is ready.
 
+        Drop your two images in:
+          assets/eye-closed.png  (default state)
+          assets/eye-open.png    (shown on hover)
+      -->
       <div class="icon-btn" id="btn-gallery" data-modal="gallery" data-hover-label="VIEW GALLERY &raquo;">
-        <div class="gallery-outline-placeholder">
-          <span>[ GALLERY ]</span>
+        <div class="icon-slot eye-slot">
+          <img src="assets/EyesClosed.png" alt="" class="ink-img eye-img eye-closed" onerror="this.style.display='none'" />
+          <img src="assets/EyesOpen.png" alt="Gallery" class="ink-img eye-img eye-open" onerror="this.style.display='none'" />
         </div>
       </div>
-      -->
     </div>
-
-    <!--
-      Suggested CSS to go with the block above (in style.css):
-
-      #btn-gallery {
-        width: 140px;
-        height: 140px;
-        top: -190px;
-        left: 105%;
-      }
-
-      .gallery-outline-placeholder {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 100%;
-        border: 2px dashed var(--gray);
-        border-radius: 8px;
-        color: var(--gray);
-        font-family: 'Courier New', monospace;
-        font-size: 0.75rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        text-align: center;
-      }
-    -->
-
   </div>
 </div>
 
@@ -337,7 +323,89 @@
   </div>
 </div>
 
-<!-- CERTIFICATE VIEWER (opens on top of a certificate card click) -->
+<!-- GALLERY -->
+<div class="overlay" id="overlay-gallery">
+  <div class="modal">
+    <button class="close cert-close" data-close>&#10005;</button>
+    <div class="modal-content">
+      <div class="cert-title-row gallery-title-row">
+        <h2 class="cert-title">GALLERY</h2>
+        <span class="cert-subtitle mono">//Artworks</span>
+      </div>
+
+      <div class="cert-grid gallery-grid">
+        <!--
+          Each card below is one artwork. Swap the numbered src paths
+          for your own files (assets/Art/1.jpg, etc.) and update the
+          title/caption. Add or remove cert-card blocks to change the
+          count — the grid reflows automatically. Clicking a thumbnail
+          opens it full-size in the same lightbox the certificates use.
+        -->
+        <div class="cert-card gallery-card gallery-card--feature">
+          <div class="cert-thumb-wrap" data-cert-view="assets/Art/1.jpg" tabindex="0" role="button" aria-label="View artwork 1" data-cert-title="Untitled 01">
+            <span class="cert-num">01</span>
+            <img src="assets/Art/1.jpg" alt="" class="cert-thumb-img" onerror="this.style.display='none'" />
+            <div class="cert-thumb-overlay">
+              <span class="cert-author-sub">Artwork</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cert-card gallery-card gallery-card--wide">
+          <div class="cert-thumb-wrap" data-cert-view="assets/Art/2.jpg" tabindex="0" role="button" aria-label="View artwork 2" data-cert-title="Untitled 02">
+            <span class="cert-num">02</span>
+            <img src="assets/Art/2.jpg" alt="" class="cert-thumb-img" onerror="this.style.display='none'" />
+            <div class="cert-thumb-overlay">
+              <span class="cert-author-sub">Artwork</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cert-card gallery-card gallery-card--regular">
+          <div class="cert-thumb-wrap" data-cert-view="assets/Art/3.jpg" tabindex="0" role="button" aria-label="View artwork 3" data-cert-title="Untitled 03">
+            <span class="cert-num">03</span>
+            <img src="assets/Art/3.jpg" alt="" class="cert-thumb-img" onerror="this.style.display='none'" />
+            <div class="cert-thumb-overlay">
+              <span class="cert-author-sub">Artwork</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cert-card gallery-card gallery-card--tall">
+          <div class="cert-thumb-wrap" data-cert-view="assets/Art/4.jpg" tabindex="0" role="button" aria-label="View artwork 4" data-cert-title="Untitled 04">
+            <span class="cert-num">04</span>
+            <img src="assets/Art/4.jpg" alt="" class="cert-thumb-img" onerror="this.style.display='none'" />
+            <div class="cert-thumb-overlay">
+              <span class="cert-author-sub">Artwork</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cert-card gallery-card gallery-card--regular">
+          <div class="cert-thumb-wrap" data-cert-view="assets/Art/5.jpg" tabindex="0" role="button" aria-label="View artwork 5" data-cert-title="Untitled 05">
+            <span class="cert-num">05</span>
+            <img src="assets/Art/5.jpg" alt="" class="cert-thumb-img" onerror="this.style.display='none'" />
+            <div class="cert-thumb-overlay">
+              <span class="cert-author-sub">Artwork</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cert-card gallery-card gallery-card--regular">
+          <div class="cert-thumb-wrap" data-cert-view="assets/Art/6.jpg" tabindex="0" role="button" aria-label="View artwork 6" data-cert-title="Untitled 06">
+            <span class="cert-num">06</span>
+            <img src="assets/Art/6.jpg" alt="" class="cert-thumb-img" onerror="this.style.display='none'" />
+            <div class="cert-thumb-overlay">
+              <span class="cert-author-sub">Artwork</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CERTIFICATE VIEWER (also reused as the gallery lightbox) -->
 <div class="overlay" id="overlay-cert-viewer">
   <button class="cert-viewer-close" data-close>&#10005;</button>
   <div class="cert-viewer-stack">
@@ -393,6 +461,8 @@
 
 <!-- CROW CHATBOT (slides in from the right) -->
 <div class="overlay overlay-right" id="overlay-crow">
+  <!-- Bigger feathers rain across the overlay for as long as the chat is open -->
+  <div class="feather-rain" id="crow-feather-rain" aria-hidden="true"></div>
   <div class="modal crow-modal" role="dialog" aria-modal="true" aria-labelledby="crow-title">
     <button class="close" data-close aria-label="Close chat">&#10005;</button>
     <div class="crow-header">

@@ -600,3 +600,60 @@
       setTimeout(() => input.focus(), 350);
     }).observe(overlay, { attributes: true, attributeFilter: ['class'] });
   })();
+
+  // 8. Feather rain — bigger feathers keep falling for as long as the crow chat stays open
+  (function () {
+    const overlay = document.getElementById('overlay-crow');
+    const rainContainer = document.getElementById('crow-feather-rain');
+    if (!overlay || !rainContainer) return;
+
+    const featherSrcs = [
+      'assets/feather-1.png',
+      'assets/feather-2.png',
+      'assets/feather-3.png',
+      'assets/feather-4.png'
+    ];
+
+    let rainTimer = null;
+
+    function spawnFeather() {
+      const img = document.createElement('img');
+      img.src = featherSrcs[Math.floor(Math.random() * featherSrcs.length)];
+      img.className = 'feather-rain-piece';
+      img.alt = '';
+      img.addEventListener('error', () => img.remove());
+      img.addEventListener('animationend', () => img.remove());
+
+      const size = 30 + Math.random() * 28;       // 30–58px — bigger than the hover feathers
+      const startLeft = Math.random() * 100;        // vw %
+      const duration = 3.5 + Math.random() * 2.5;   // 3.5–6s fall
+      const drift = Math.random() * 140 - 70;       // sideways px drift
+      const spinDeg = 180 + Math.random() * 360;
+      const spin = (Math.random() < 0.5 ? -spinDeg : spinDeg) + 'deg';
+
+      img.style.width = size + 'px';
+      img.style.left = startLeft + '%';
+      img.style.animationDuration = duration + 's';
+      img.style.setProperty('--drift', drift + 'px');
+      img.style.setProperty('--spin', spin);
+
+      rainContainer.appendChild(img);
+    }
+
+    function startRain() {
+      if (rainTimer) return;
+      spawnFeather();
+      rainTimer = setInterval(spawnFeather, 260);
+    }
+
+    function stopRain() {
+      clearInterval(rainTimer);
+      rainTimer = null;
+      rainContainer.innerHTML = '';
+    }
+
+    new MutationObserver(() => {
+      if (overlay.classList.contains('open')) startRain();
+      else stopRain();
+    }).observe(overlay, { attributes: true, attributeFilter: ['class'] });
+  })();

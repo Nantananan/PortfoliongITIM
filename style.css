@@ -375,6 +375,108 @@
 
   #btn-bird:hover .ink-img { transform: scale(1.05); }
 
+  /* ---- Falling feathers on crow hover ---- */
+  .feather-field {
+    position: absolute;
+    inset: 0;
+    overflow: visible;
+    pointer-events: none;
+    z-index: 6;
+  }
+  .feather {
+    position: absolute;
+    top: 78%;
+    width: 16px;
+    height: auto;
+    opacity: 0;
+    filter: grayscale(1) contrast(1.2);
+    mix-blend-mode: multiply;
+  }
+  .feather-1 { left: 30%; }
+  .feather-2 { left: 50%; }
+  .feather-3 { left: 65%; }
+  .feather-4 { left: 42%; }
+
+  #btn-bird:hover .feather-1 { animation: featherFall1 2.6s ease-in infinite; animation-delay: 0s; }
+  #btn-bird:hover .feather-2 { animation: featherFall2 3s ease-in infinite; animation-delay: 0.5s; }
+  #btn-bird:hover .feather-3 { animation: featherFall3 2.8s ease-in infinite; animation-delay: 1s; }
+  #btn-bird:hover .feather-4 { animation: featherFall4 3.2s ease-in infinite; animation-delay: 1.5s; }
+
+  @keyframes featherFall1 {
+    0%   { opacity: 0; transform: translate(0, 0) rotate(0deg); }
+    12%  { opacity: 1; }
+    85%  { opacity: 1; }
+    100% { opacity: 0; transform: translate(-32px, 90px) rotate(220deg); }
+  }
+  @keyframes featherFall2 {
+    0%   { opacity: 0; transform: translate(0, 0) rotate(0deg); }
+    12%  { opacity: 1; }
+    85%  { opacity: 1; }
+    100% { opacity: 0; transform: translate(24px, 105px) rotate(-200deg); }
+  }
+  @keyframes featherFall3 {
+    0%   { opacity: 0; transform: translate(0, 0) rotate(0deg); }
+    12%  { opacity: 1; }
+    85%  { opacity: 1; }
+    100% { opacity: 0; transform: translate(-18px, 80px) rotate(160deg); }
+  }
+  @keyframes featherFall4 {
+    0%   { opacity: 0; transform: translate(0, 0) rotate(0deg); }
+    12%  { opacity: 1; }
+    85%  { opacity: 1; }
+    100% { opacity: 0; transform: translate(36px, 100px) rotate(-240deg); }
+  }
+
+  /* ---- Feather rain: bigger feathers falling while the crow chat is open ---- */
+  .feather-rain {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .feather-rain-piece {
+    position: absolute;
+    top: -60px;
+    opacity: 0;
+    filter: grayscale(1) contrast(1.2);
+    mix-blend-mode: multiply;
+    animation-name: featherRainFall;
+    animation-timing-function: ease-in;
+    animation-fill-mode: forwards;
+  }
+  @keyframes featherRainFall {
+    0%   { opacity: 0; transform: translate(0, 0) rotate(0deg); }
+    8%   { opacity: 0.9; }
+    92%  { opacity: 0.9; }
+    100% { opacity: 0; transform: translate(var(--drift, 0px), 115vh) rotate(var(--spin, 180deg)); }
+  }
+
+  /* ---- Gallery "eye" icon: closed by default, opens on hover ---- */
+  #btn-gallery {
+    width: 100px;
+    height: 100px;
+    top: -170px;
+    left: 100%;
+  }
+
+  .eye-slot {
+    position: relative;
+  }
+
+  .eye-img {
+    position: absolute;
+    inset: 0;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+
+  .eye-open { opacity: 0; }
+  .eye-closed { opacity: 1; }
+
+  #btn-gallery:hover .eye-closed { opacity: 0; }
+  #btn-gallery:hover .eye-open { opacity: 1; }
+  #btn-gallery:hover .ink-img { transform: scale(1.05); }
+
   .name-outline-placeholder {
     display: flex;
     align-items: center;
@@ -494,7 +596,8 @@
   .modal .close:hover { color: var(--line); }
 
   /* ---- Certificates modal — bold title + card grid ---- */
-  #overlay-certifications .modal { width: min(960px, 96vw); }
+  #overlay-certifications .modal,
+  #overlay-gallery .modal { width: min(960px, 96vw); }
   .cert-title-row {
     display: flex;
     align-items: baseline;
@@ -628,6 +731,35 @@
   /* First card gets a highlighted border, matching the reference's featured card */
   .cert-card:first-child .cert-thumb-wrap {
     border-color: #c0392b;
+  }
+
+  /* ---- Gallery: hierarchical (bento-style) grid ----
+     Bigger pieces get more visual weight instead of every thumbnail
+     being the same size. Row height is fixed; cards span extra rows/
+     columns via modifier classes so the layout tiles without gaps. */
+  .gallery-grid {
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 130px;
+    grid-auto-flow: dense;
+  }
+
+  .gallery-grid .cert-thumb-wrap {
+    aspect-ratio: unset;
+    height: 100%;
+  }
+
+  .gallery-card { display: block; }
+  .gallery-card .cert-thumb-wrap { height: 100%; }
+
+  .gallery-card--feature { grid-column: span 2; grid-row: span 2; }
+  .gallery-card--wide    { grid-column: span 2; grid-row: span 1; }
+  .gallery-card--tall    { grid-column: span 1; grid-row: span 2; }
+  .gallery-card--regular { grid-column: span 1; grid-row: span 1; }
+
+  @media (max-width: 780px) {
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 120px; }
+    .gallery-card--feature { grid-column: span 2; grid-row: span 2; }
+    .gallery-card--wide    { grid-column: span 2; grid-row: span 1; }
   }
 
   /* ---- Certificate viewer — dark lightbox, image + caption below ---- */
@@ -925,6 +1057,7 @@
     .chain { height: 250px; }
     #btn-tree { width: 100px; height: 100px; top: 15px; }
     #btn-bird { width: 110px; height: 100px; top: 5px; }
+    #btn-gallery { width: 60px; height: 60px; top: -110px; left: 95%; }
     .outline-group { height: 190px; }
     .name-outline-placeholder { height: 140px; font-size: 0.8rem; }
     .legend { font-size: 0.75rem; top: 15px; left: 15px; }
@@ -1412,10 +1545,14 @@
     background: rgba(255, 255, 255, 0.55);
     padding: 24px;
   }
+  .overlay.overlay-right.open {
+    backdrop-filter: none;
+  }
   .crow-modal {
     width: min(420px, 100%);
     max-height: none;
-    height: 100%;
+    height: min(640px, 90%);
+    align-self: center;
     padding: 28px 24px 20px;
     transform: translateX(60px);
     opacity: 0;
@@ -1483,5 +1620,5 @@
 
   @media (max-width: 600px) {
     .overlay.overlay-right { padding: 0; }
-    .crow-modal { width: 100%; border-width: 0; padding: 24px 16px 16px; }
+    .crow-modal { width: 100%; height: 100%; align-self: stretch; border-width: 0; padding: 24px 16px 16px; }
   }
